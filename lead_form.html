@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shop Form - CRM_BHARATPE</title>
+  <style>
+    /* Body and Frame */
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      -webkit-text-size-adjust: none;
+      font-family: Arial, sans-serif;
+    }
+
+    .mobile-frame {
+      position: relative;
+      width: 330px;   /* Approx CSS width for Galaxy M14 5G */
+      height: 750px;  /* Approx CSS height for Galaxy M14 5G */
+      background: #000;
+      border-radius: 40px;
+      box-shadow: 0 0 30px #000;
+      overflow: hidden;
+      border: 6px solid #333;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Side Buttons */
+    .volume-buttons {
+      position: absolute;
+      left: -12px;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .volume-up, .volume-down {
+      width: 6px;
+      height: 40px;
+      background: #666;
+      border-radius: 3px;
+    }
+    .power-button {
+      position: absolute;
+      right: -12px;
+      top: 150px;
+      width: 6px;
+      height: 60px;
+      background: #666;
+      border-radius: 3px;
+    }
+
+    /* Screen Area */
+    .screen {
+      padding: 20px;
+      box-sizing: border-box;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      color: rgba(255,255,255,0.1);
+      overflow-y: auto;
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .live-time {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #fff; /* white for CRM_ */
+      margin: 0 0 10px 0;
+    }
+    .green-text {
+      color: #00ff00; /* bright green */
+    }
+    .blue-heading {
+      color: #007bff; /* bright blue */
+      border-left: 5px solid #007bff;
+      padding-left: 10px;
+      margin: 0 0 15px 0;
+      font-weight: 600;
+      font-size: 20px;
+      text-align: left;
+    }
+
+    /* Form */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    label {
+      font-size: 16px;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      color: rgba(255,255,255,0.3);
+    }
+
+    input, textarea {
+      margin-top: 6px;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+      background-color: #222;
+      color: #eee;
+      resize: vertical;
+    }
+    input::placeholder, textarea::placeholder {
+      color: #666;
+    }
+
+    /* Submit Button */
+    button {
+      margin-top: 10px;
+      padding: 12px;
+      background: #222;
+      color: #eee;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #333;
+    }
+    button:disabled {
+      background-color: #555;
+      cursor: default;
+    }
+
+    /* Spinner */
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid #fff;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 16px auto 0 auto;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Bottom Navigation Buttons */
+    .bottom-buttons {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 0;
+      background: #111;
+      border-top: 1px solid #222;
+    }
+    .home-button, .back-button, .recent-button {
+      width: 24px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      box-shadow: inset 0 0 4px rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-frame">
+    <div class="volume-buttons">
+      <div class="volume-up"></div>
+      <div class="volume-down"></div>
+    </div>
+    <div class="power-button"></div>
+
+    <div class="screen">
+      <div class="header">
+        <div class="live-time" id="liveDateTime">Loading...</div>
+        <h1>CRM_<span class="green-text">BHARATPE</span></h1>
+        <h3 class="blue-heading">Add Lead Data</h3>
+      </div>
+
+      <form id="shopForm" autocomplete="off">
+        <label>
+          Shop Name:
+          <input type="text" id="shopName" name="shopName" placeholder="Enter Shop Name" required />
+        </label>
+        <label>
+          Owner Name:
+          <input type="text" id="ownerName" name="ownerName" placeholder="Enter Owner Name" required />
+        </label>
+        <label>
+          Mobile Number:
+          <input type="tel" id="mobile" name="mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}" required />
+        </label>
+        <label>
+          Address:
+          <input type="text" id="address" name="address" placeholder="Enter Address" required />
+        </label>
+        <label>
+          Landmark:
+          <input type="text" id="landmark" name="landmark" placeholder="Enter Landmark" />
+        </label>
+        <label>
+          Description:
+          <textarea id="description" name="description" placeholder="Enter Description" rows="3" required></textarea>
+        </label>
+
+        <button type="submit" id="submitBtn">Next</button>
+        <div class="spinner" id="loadingSpinner"></div>
+      </form>
+    </div>
+
+    <div class="bottom-buttons">
+	 <div class="copyright">
+        © 2025 abhinnabehuria@outlook.com
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    // Live date & time update
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+      document.getElementById('liveDateTime').textContent =
+        now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // Form submit handling
+    const form = document.getElementById('shopForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Hide submit button and show spinner
+      submitBtn.style.display = 'none';
+      loadingSpinner.style.display = 'block';
+
+      // Collect form data, including landmark
+      const formData = {
+        shopName: form.shopName.value.trim(),
+        ownerName: form.ownerName.value.trim(),
+        mobile: form.mobile.value.trim(),
+        address: form.address.value.trim(),
+        landmark: form.landmark.value.trim(),
+        description: form.description.value.trim(),
+      };
+
+      // Save to localStorage
+      localStorage.setItem('shopData', JSON.stringify(formData));
+
+      // Redirect after short delay
+      setTimeout(() => {
+        window.location.href = 'lead_preview_upload.html';
+      }, 1200);
+    });
+  </script>
+</body>
+</html>

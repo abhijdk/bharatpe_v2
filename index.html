@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CRM_BHARATPE</title>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .mobile-frame {
+      position: relative;
+      width: 330px;
+      height: 700px;
+      background: #000;
+      border-radius: 40px;
+      box-shadow: 0 0 30px #000;
+      overflow: hidden;
+      border: 6px solid #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .volume-buttons {
+      position: absolute;
+      left: -12px;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .volume-up, .volume-down {
+      width: 6px;
+      height: 40px;
+      background: #666;
+      border-radius: 3px;
+    }
+
+    .power-button {
+      position: absolute;
+      right: -12px;
+      top: 150px;
+      width: 6px;
+      height: 60px;
+      background: #666;
+      border-radius: 3px;
+    }
+
+    .screen {
+      padding: 20px;
+      box-sizing: border-box;
+      color: rgba(255,255,255,0.1);
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+    }
+
+    .header {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .live-time {
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #ccc;
+    }
+
+    h1 {
+      font-size: 22px;
+      color: #fff;
+      margin: 0 0 10px 0;
+    }
+
+    .green-text {
+      color: #00ff00;
+    }
+
+    .action-button {
+      width: 100%;
+      max-width: 280px;
+      margin: 8px 0;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: #eee;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .action-button:hover {
+      background: #333;
+    }
+
+    .data-box, .time-box {
+      width: 100%;
+      max-width: 280px;
+      margin-top: 16px;
+      padding: 12px;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #bbb;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .status-container {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .status-bulb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: gray;
+      box-shadow: 0 0 4px rgba(255,255,255,0.2);
+    }
+
+    /* Bottom buttons container */
+    .bottom-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      padding: 12px 0;
+      background: #111;
+      border-top: 1px solid #222;
+    }
+
+    /* New buttons */
+    .bottom-button {
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 20px;
+      color: #eee;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+
+    .bottom-button:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .copyright {
+      font-size: 10px;
+      color: #444;
+      text-align: center;
+      margin-top: auto;
+      padding: 8px 0 0;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-frame">
+    <div class="volume-buttons"><div class="volume-up"></div><div class="volume-down"></div></div>
+    <div class="power-button"></div>
+    <div class="screen">
+      <div class="header">
+        <div class="live-time" id="liveDateTime">Loading date/time...</div>
+        <h1>CRM_<span class="green-text">BHARATPE</span></h1>
+      </div>
+      <button class="action-button" onclick="window.location.href='form.html'">➕ Add New Merchant</button>
+      <button class="action-button" onclick="window.location.href='lead_form.html'">➕ Add New Lead</button>
+      <button class="action-button" onclick="window.location.href='merchant_data.html'">📋 View Merchant Data</button>
+      <button class="action-button" onclick="window.location.href='lead_data.html'">👥 View Leads Data</button>
+      <div class="data-box">
+        <strong>Merchant Stats:</strong><br />
+        Total Merchants: <span id="totalMerchants">26</span><br />
+        Active Leads: <span id="activeLeads">23</span><br />
+        Last Updated: Just now
+      </div>
+      <div class="time-box">
+        <strong>Punch Times & Status:</strong><br />
+        Punch In Time: <span id="punchInTime">--:--:--</span><br />
+        Punch Out Time: <span id="punchOutTime">--:--:--</span><br />
+        <div class="status-container" id="statusContainer"></div>
+      </div>
+      <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
+    </div>
+    <div class="bottom-buttons">
+      <button class="bottom-button" onclick="window.open('https://www.google.com', '_blank')">Google</button>
+      <button class="bottom-button" onclick="window.open('https://chat.openai.com', '_blank')">ChatGPT</button>
+    </div>
+  </div>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: 'short', year:'numeric', month:'short', day:'numeric' };
+      document.getElementById('liveDateTime').innerText = now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
+    }
+
+    function randomBetween(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function formatTime(date) {
+      return date.toLocaleTimeString();
+    }
+
+    function setFixedPunchTimes() {
+      const now = new Date();
+      document.getElementById('punchInTime').innerText = formatTime(new Date(now - 10 * 60 * 1000));
+      document.getElementById('punchOutTime').innerText = formatTime(new Date(now.getTime() + 8 * 60 * 60 * 1000));
+    }
+
+    let bulbCount = 1;
+    function updateStatus() {
+      const now = new Date(), hour = now.getHours();
+      let color;
+      if (hour < 12) color = 'green';
+      else if (hour < 15) color = 'orange';
+      else color = 'red';
+
+      const c = document.getElementById('statusContainer');
+      c.innerHTML = '';
+      for (let i = 0; i < bulbCount; i++) {
+        const d = document.createElement('div');
+        d.className = 'status-bulb';
+        d.style.background = color;
+        c.appendChild(d);
+      }
+      bulbCount = bulbCount >= 15 ? 1 : bulbCount + 1;
+    }
+
+    function updateStats() {
+      document.getElementById('totalMerchants').innerText = randomBetween(10, 35);
+      document.getElementById('activeLeads').innerText = randomBetween(12, 35);
+    }
+
+    let popupShown = false;
+    function triggerPopups() {
+      const hour = new Date().getHours();
+      if (popupShown) return;
+
+      if (hour >= 17 && hour <= 23) {
+        alert("Kindly return to your home");
+        alert("Kindly take some food");
+        alert("It's your study time");
+        popupShown = true;
+      } else if (hour === 16) {
+        alert("Kindly return to your home");
+        alert("Kindly take some food");
+        popupShown = true;
+      } else if (hour === 15) {
+        alert("You are late for your lunch");
+        popupShown = true;
+      }
+    }
+
+    setFixedPunchTimes();
+    updateDateTime();
+    updateStats();
+    updateStatus();
+    triggerPopups();
+
+    setInterval(() => {
+      updateDateTime();
+      updateStats();
+      updateStatus();
+    }, 1000);
+  </script>
+</body>
+</html>

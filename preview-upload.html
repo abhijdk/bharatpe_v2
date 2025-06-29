@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Preview & Upload - CRM_BHARATPE</title>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .mobile-frame {
+      position: relative;
+      width: 330px;
+      height: 700px;
+      background: #000;
+      border-radius: 40px;
+      box-shadow: 0 0 30px #000;
+      overflow: hidden;
+      border: 6px solid #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.1);
+    }
+
+    .volume-buttons {
+      position: absolute;
+      left: -12px;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .volume-up, .volume-down {
+      width: 6px;
+      height: 40px;
+      background: #666;
+      border-radius: 3px;
+    }
+
+    .power-button {
+      position: absolute;
+      right: -12px;
+      top: 150px;
+      width: 6px;
+      height: 60px;
+      background: #666;
+      border-radius: 3px;
+    }
+
+    .screen {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      color: rgba(255,255,255,0.1);
+    }
+
+    .header {
+      margin-bottom: 10px;
+      text-align: center;
+      position: relative;
+    }
+
+    .live-time {
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #888;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #fff;
+      margin: 0 0 10px 0;
+    }
+
+    .green-text {
+      color: #00ff00;
+    }
+
+    /* New blue heading aligned left */
+    h3.blue-heading {
+      color: #007bff;
+      margin: 0 0 10px 0;
+      font-weight: 600;
+      text-align: left;
+      width: 100%;
+    }
+
+    .preview {
+      background: #111;
+      padding: 10px;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 15px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .preview p {
+      margin: 6px 0;
+    }
+
+    .upload-section label {
+      display: block;
+      margin: 12px 0 6px 0;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .upload-section input[type="file"] {
+      width: 100%;
+      background-color: #111;
+      color: #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      background: #222;
+      color: #eee;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #333;
+    }
+
+    button:disabled {
+      background-color: #555;
+    }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid #fff;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto 0 auto;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .bottom-buttons {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 0;
+      background: #111;
+      border-top: 1px solid #222;
+    }
+
+    .home-button, .back-button, .recent-button {
+      width: 24px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      box-shadow: inset 0 0 4px rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-frame">
+    <div class="volume-buttons">
+      <div class="volume-up"></div>
+      <div class="volume-down"></div>
+    </div>
+    <div class="power-button"></div>
+
+    <div class="screen">
+      <div class="header">
+        <div class="live-time" id="liveDateTime">Loading...</div>
+        <h1>CRM_<span class="green-text">BHARATPE</span></h1><br><br>
+        <h3 class="blue-heading">Add Merchant QR</h3> <!-- New heading aligned left -->
+      </div>
+
+      <div class="preview" id="previewData"></div>
+
+      <div class="upload-section">
+        <label for="qr1">Upload QR Image 1 (Shop QR):</label>
+        <input type="file" id="qr1" accept="image/*" required />
+
+        <label for="qr2">Upload QR Image 2 (Owner QR):</label>
+        <input type="file" id="qr2" accept="image/*" required />
+      </div>
+
+      <button id="submitBtn">Submit & Continue</button>
+      <div class="spinner" id="loadingSpinner"></div>
+    </div>
+
+    <div class="bottom-buttons">
+	<div class="copyright">
+        © 2025 abhinnabehuria@outlook.com
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    // Live clock
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+      document.getElementById('liveDateTime').textContent =
+        now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // Load from localStorage
+    const data = JSON.parse(localStorage.getItem('shopData') || '{}');
+
+    document.getElementById('previewData').innerHTML = `
+      <p><strong>Shop Name:</strong> ${data.shopName || ''}</p>
+      <p><strong>Owner Name:</strong> ${data.ownerName || ''}</p>
+      <p><strong>Mobile:</strong> ${data.mobile || ''}</p>
+      <p><strong>Address:</strong> ${data.address || ''}</p>
+      <p><strong>Description:</strong> ${data.description || ''}</p>
+    `;
+
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    submitBtn.addEventListener('click', async () => {
+      const qr1 = document.getElementById('qr1').files[0];
+      const qr2 = document.getElementById('qr2').files[0];
+
+      if (!qr1 || !qr2) {
+        alert("Please upload both QR images.");
+        return;
+      }
+
+      submitBtn.style.display = 'none';
+      loadingSpinner.style.display = 'block';
+
+      const fullData = {
+        ...data,
+        qr1: await fileToBase64(qr1),
+        qr2: await fileToBase64(qr2)
+      };
+
+      // Save shop and owner name to localStorage for success.html
+      localStorage.setItem('lastShopName', data.shopName || '');
+      localStorage.setItem('lastOwnerName', data.ownerName || '');
+
+      try {
+        await fetch('https://script.google.com/macros/s/AKfycbwbKHa2qxdJx4U0puR6Naw-obonOs51IhxMH1IYmimrLlPcsU5yWX_urwf81vlB5yaY/exec', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(fullData)
+        });
+      } catch (err) {
+        console.error("Error uploading data:", err);
+      }
+
+      setTimeout(() => {
+        window.location.href = 'success.html';
+      }, 1500);
+    });
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
+</body>
+</html>
