@@ -5,87 +5,103 @@
   <title>Success - CRM_BHARATPE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background-color: #1e1e1e;
+    body {
+      background: #1e1e1e;
       font-family: Arial, sans-serif;
-      height: 100dvh;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
+      height: 100vh;
+      -webkit-text-size-adjust: none;
       overflow: hidden;
     }
 
     .mobile-frame {
+      position: relative;
       width: 390px;
-      height: 100dvh;
+      height: 850px;
       background: #111;
-      border-radius: 35px;
-      box-shadow: 0 0 25px #000;
+      border-radius: 45px;
+      box-shadow: 0 0 40px #000;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      position: relative;
+      justify-content: space-between;
+      color: rgba(255,255,255,0.9);
     }
 
     .volume-buttons {
       position: absolute;
-      left: -10px;
-      top: 70px;
+      left: -12px;
+      top: 80px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
+    }
+
+    .volume-up, .volume-down, .power-button {
+      width: 6px;
+      border-radius: 3px;
+      background: #444;
     }
 
     .volume-up, .volume-down {
-      width: 4px;
-      height: 30px;
-      background: #444;
-      border-radius: 2px;
+      height: 40px;
     }
 
     .power-button {
       position: absolute;
-      right: -10px;
-      top: 130px;
-      width: 4px;
-      height: 45px;
-      background: #444;
-      border-radius: 2px;
+      right: -12px;
+      top: 150px;
+      height: 60px;
     }
 
     .screen {
-      flex: 1;
-      padding: 15px;
-      padding-bottom: 80px;
-      overflow-y: auto;
+      padding: 20px;
       box-sizing: border-box;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
     }
 
     .live-time {
-      font-size: 12px;
-      margin-bottom: 5px;
-      color: #ccc;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #cccccc;
+      font-weight: 500;
       text-align: center;
     }
 
     h1 {
-      font-size: 20px;
+      font-size: 28px;
       color: #00ff99;
-      margin: 0 0 10px;
+      margin: 0 0 20px 0;
       text-align: center;
     }
 
+    .success {
+      color: #00ff99;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #shopInfo {
+      font-size: 0.95rem;
+      color: #00ccff;
+      margin-top: 10px;
+    }
+
     .spinner {
-      border: 3px solid rgba(255,255,255,0.2);
-      border-top: 3px solid #00ff99;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid #fff;
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
       animation: spin 1s linear infinite;
-      margin: 15px auto;
+      margin: 16px auto;
     }
 
     @keyframes spin {
@@ -93,26 +109,11 @@
       100% { transform: rotate(360deg); }
     }
 
-    .success {
-      color: #00ff99;
-      font-size: 16px;
-      margin-top: 15px;
-      display: none;
-      text-align: center;
-    }
-
-    #shopInfo {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #00ff99;
-    }
-
     .bottom-buttons {
       display: flex;
       justify-content: center;
       gap: 20px;
-      padding: 12px 0;
-      min-height: 60px;
+      padding: 15px 0;
       background: #111;
       border-top: 1px solid #222;
     }
@@ -134,10 +135,10 @@
     }
 
     .copyright {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: #444;
       text-align: center;
-      padding-bottom: 4px;
+      padding-bottom: 6px;
     }
 
     #overlay {
@@ -160,11 +161,11 @@
 <div id="overlay">Tap anywhere to <br> hear confirmation</div>
 
 <div class="mobile-frame">
-  <div class="volume-buttons" aria-hidden="true">
+  <div class="volume-buttons">
     <div class="volume-up"></div>
     <div class="volume-down"></div>
   </div>
-  <div class="power-button" aria-hidden="true"></div>
+  <div class="power-button"></div>
 
   <div class="screen">
     <div class="live-time" id="liveDateTime">Loading...</div>
