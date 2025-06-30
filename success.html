@@ -5,155 +5,140 @@
   <title>Success - CRM_BHARATPE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* Body & mobile frame styles from first page adapted for 6.6 inch */
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
       background-color: #1e1e1e;
       font-family: Arial, sans-serif;
-      color: white;
-      margin: 0;
+      height: 100dvh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      -webkit-text-size-adjust: none;
+      color: white;
       overflow: hidden;
     }
+
     .mobile-frame {
-      position: relative;
-      width: 390px;  /* 6.6 inch width */
-      max-height: 100vh; /* adapt to viewport height */
-      background: #111; /* a bit darker than body */
-      border-radius: 45px;
-      box-shadow: 0 0 40px #000;
-      overflow: hidden;
+      width: 360px;
+      height: 95dvh;
+      background: #111;
+      border-radius: 30px;
+      box-shadow: 0 0 25px #000;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      text-align: center;
-      user-select: none;
-      z-index: 1;
-      height: 100%;
+      overflow: hidden;
+      position: relative;
     }
-    /* Volume and power buttons from first page */
+
     .volume-buttons {
       position: absolute;
-      left: -12px;
-      top: 80px;
+      left: -10px;
+      top: 70px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      user-select: none;
+      gap: 10px;
     }
+
     .volume-up, .volume-down {
-      width: 6px;
-      height: 40px;
-      background: #444; /* slightly lighter */
-      border-radius: 3px;
+      width: 4px;
+      height: 30px;
+      background: #444;
+      border-radius: 2px;
     }
+
     .power-button {
       position: absolute;
-      right: -12px;
-      top: 150px;
-      width: 6px;
-      height: 60px;
+      right: -10px;
+      top: 130px;
+      width: 4px;
+      height: 45px;
       background: #444;
-      border-radius: 3px;
+      border-radius: 2px;
     }
-    /* Screen area */
+
     .screen {
-      padding: 20px;
-      box-sizing: border-box;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      flex: 1;
+      padding: 15px;
+      padding-bottom: 60px;
       overflow-y: auto;
-      color: rgba(255,255,255,0.9);
-      padding-bottom: 80px; /* extra bottom padding for buttons */
+      box-sizing: border-box;
     }
-    .header {
-      margin-bottom: 10px;
-    }
+
     .live-time {
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: #cccccc;
-      font-weight: 500;
-      user-select: none;
+      font-size: 12px;
+      margin-bottom: 5px;
+      color: #ccc;
+      text-align: center;
     }
+
     h1 {
-      font-size: 24px;
+      font-size: 20px;
       color: #00ff99;
-      margin: 0 0 10px 0;
-      user-select: none;
+      margin: 0 0 10px;
+      text-align: center;
     }
-    /* Spinner from your success page */
+
     .spinner {
-      border: 4px solid rgba(255, 255, 255, 0.2);
-      border-top: 4px solid #00ff99;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top: 3px solid #00ff99;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
       animation: spin 1s linear infinite;
-      margin: 20px auto;
+      margin: 15px auto;
     }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    /* Success message style */
+
     .success {
       color: #00ff99;
-      font-size: 20px;
-      margin-top: 20px;
-      display: none;
-      user-select: none;
-    }
-    #shopInfo {
-      margin-top: 10px;
       font-size: 16px;
-      color: #00ff99;
-      user-select: none;
+      margin-top: 15px;
+      display: none;
+      text-align: center;
     }
-    /* Bottom buttons consistent with first page style */
+
+    #shopInfo {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #00ff99;
+    }
+
     .bottom-buttons {
       display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 30px;
-      padding: 15px 0;
-      padding-bottom: env(safe-area-inset-bottom, 15px); /* iOS safe area */
+      gap: 20px;
+      padding: 12px 0;
       background: #111;
       border-top: 1px solid #222;
-      user-select: none;
     }
+
     .bottom-buttons > div {
       cursor: pointer;
-      font-size: 30px;
+      font-size: 24px;
       color: #00ff99;
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 12px;
-      transition: background-color 0.3s ease;
-      user-select: none;
+      border-radius: 10px;
     }
-    .bottom-buttons > div:hover,
-    .bottom-buttons > div:focus {
+
+    .bottom-buttons > div:hover {
       background-color: rgba(0, 255, 153, 0.2);
-      outline: none;
     }
-    /* Copyright */
+
     .copyright {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #444;
       text-align: center;
-      padding: 8px 0 0;
-      user-select: none;
+      padding-bottom: 4px;
     }
-    /* Overlay */
+
     #overlay {
       position: fixed;
       inset: 0;
@@ -162,130 +147,102 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 22px;
+      font-size: 18px;
       font-weight: bold;
-      cursor: pointer;
-      z-index: 10;
-      user-select: none;
       text-align: center;
-      padding: 20px;
+      z-index: 10;
+      padding: 15px;
     }
   </style>
 </head>
 <body>
-  <div id="overlay">Tap anywhere to <br> hear confirmation</div>
+<div id="overlay">Tap anywhere to <br> hear confirmation</div>
 
-  <div class="mobile-frame" role="main" aria-label="CRM BharatPe Mobile App - Success">
-    <div class="volume-buttons" aria-hidden="true">
-      <div class="volume-up"></div>
-      <div class="volume-down"></div>
-    </div>
-    <div class="power-button" aria-hidden="true"></div>
+<div class="mobile-frame">
+  <div class="volume-buttons" aria-hidden="true">
+    <div class="volume-up"></div>
+    <div class="volume-down"></div>
+  </div>
+  <div class="power-button" aria-hidden="true"></div>
 
-    <div class="screen">
-      <div class="header">
-        <div class="live-time" id="liveDateTime">Loading...</div>
-        <h1>CRM_<span aria-label="BharatPe" style="color:#00ff99;">BHARATPE</span></h1>
-      </div>
-      <div class="spinner" id="spinner"></div>
-      <div class="success" id="message">
-        🎉 Congratulations! Your shop is now live on <strong>CRM_BHARATPE</strong>.
-        <div id="shopInfo"></div>
-      </div>
-    </div>
-
-    <div class="bottom-buttons" role="navigation" aria-label="Bottom Navigation">
-      <div title="Merchant Data" onclick="goMerchantData()" tabindex="0" role="button" aria-pressed="false">📋</div>
-      <div title="Home" onclick="goHome()" tabindex="0" role="button" aria-pressed="false">🏠</div>
-      <div title="Add Lead" onclick="goLeadForm()" tabindex="0" role="button" aria-pressed="false">➕</div>
-    </div>
-    <div class="copyright">
-      © 2025 abhinnabehuria@outlook.com
+  <div class="screen">
+    <div class="live-time" id="liveDateTime">Loading...</div>
+    <h1>CRM_<span style="color:#00ff99;">BHARATPE</span></h1>
+    <div class="spinner" id="spinner"></div>
+    <div class="success" id="message">
+      🎉 Congratulations! Your shop is now live on <strong>CRM_BHARATPE</strong>.
+      <div id="shopInfo"></div>
     </div>
   </div>
 
-  <script>
-    // Update live date and time
-    function updateDateTime() {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-      const time = now.toLocaleTimeString();
-      const date = now.toLocaleDateString(undefined, options);
-      document.getElementById('liveDateTime').innerText = `${date} ${time}`;
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+  <div class="bottom-buttons">
+    <div onclick="goMerchantData()" title="Merchant Data">📋</div>
+    <div onclick="goHome()" title="Home">🏠</div>
+    <div onclick="goLeadForm()" title="Add Lead">➕</div>
+  </div>
 
-    // Fake upload simulation
-    async function uploadToDrive() {
-      return new Promise(resolve => setTimeout(resolve, 3000));
-    }
+  <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
+</div>
 
-    // Navigation functions
-    function goHome() {
-      window.location.href = 'index.html';
-    }
-    function goMerchantData() {
-      window.location.href = 'merchant_data.html';
-    }
-    function goLeadForm() {
-      window.location.href = 'form.html';
-    }
+<script>
+  function updateDateTime() {
+    const now = new Date();
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    const time = now.toLocaleTimeString();
+    const date = now.toLocaleDateString(undefined, options);
+    document.getElementById('liveDateTime').innerText = `${date} ${time}`;
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
 
-    // Speech synthesis for onboard message with female voice
-    function speakOnboardMessage() {
-      const message = "All done, merchant is live on mobile app";
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.lang = 'en-US';
-        utterance.pitch = 1.1;
-        utterance.rate = 0.9;
-        // Prefer female voice
-        const voices = window.speechSynthesis.getVoices();
-        let femaleVoice = voices.find(v => /female|woman|girl|mother|female/i.test(v.name));
-        if (!femaleVoice) {
-          femaleVoice = voices.find(v => v.name.toLowerCase().includes('female'));
-        }
-        if (!femaleVoice && voices.length > 0) {
-          femaleVoice = voices[0];
-        }
-        if (femaleVoice) {
-          utterance.voice = femaleVoice;
-        }
-        window.speechSynthesis.speak(utterance);
-      }
+  function goHome() { window.location.href = 'index.html'; }
+  function goMerchantData() { window.location.href = 'merchant_data.html'; }
+  function goLeadForm() { window.location.href = 'form.html'; }
+
+  function speakOnboardMessage() {
+    const message = "All done, merchant is live on mobile app";
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(message);
+      utterance.lang = 'en-US';
+      utterance.pitch = 1.1;
+      utterance.rate = 0.9;
+      const voices = window.speechSynthesis.getVoices();
+      let femaleVoice = voices.find(v => /female|woman|girl|mother|lady/i.test(v.name));
+      if (!femaleVoice && voices.length) femaleVoice = voices[0];
+      utterance.voice = femaleVoice;
+      window.speechSynthesis.speak(utterance);
     }
+  }
 
-    // Show stored shop info from localStorage
-    function displayShopInfo() {
-      const shopName = localStorage.getItem('lastShopName') || 'N/A';
-      const ownerName = localStorage.getItem('lastOwnerName') || 'N/A';
-      document.getElementById('shopInfo').innerHTML = `
-        <p><strong>Shop Name:</strong> ${shopName}</p>
-        <p><strong>Owner Name:</strong> ${ownerName}</p>
-      `;
-    }
+  function displayShopInfo() {
+    const shopName = localStorage.getItem('lastShopName') || 'N/A';
+    const ownerName = localStorage.getItem('lastOwnerName') || 'N/A';
+    document.getElementById('shopInfo').innerHTML = `
+      <p><strong>Shop Name:</strong> ${shopName}</p>
+      <p><strong>Owner Name:</strong> ${ownerName}</p>
+    `;
+  }
 
-    // Initialize page after simulated upload
-    async function initPage() {
-      await uploadToDrive();
-      document.getElementById('spinner').style.display = 'none';
-      document.getElementById('message').style.display = 'block';
-      displayShopInfo();
-    }
+  async function uploadToDrive() {
+    return new Promise(resolve => setTimeout(resolve, 2000));
+  }
 
-    // Setup event listeners
-    window.addEventListener('load', () => {
-      // Trigger voices loading
-      window.speechSynthesis.onvoiceschanged = () => {};
-      initPage();
-    });
+  async function initPage() {
+    await uploadToDrive();
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('message').style.display = 'block';
+    displayShopInfo();
+  }
 
-    // Overlay click triggers speech and hides overlay
-    document.getElementById('overlay').addEventListener('click', () => {
-      speakOnboardMessage();
-      document.getElementById('overlay').style.display = 'none';
-    });
-  </script>
+  window.addEventListener('load', () => {
+    window.speechSynthesis.onvoiceschanged = () => {};
+    initPage();
+  });
+
+  document.getElementById('overlay').addEventListener('click', () => {
+    speakOnboardMessage();
+    document.getElementById('overlay').style.display = 'none';
+  });
+</script>
 </body>
 </html>
