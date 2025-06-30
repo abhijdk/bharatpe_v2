@@ -3,30 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <title>Preview & Upload - CRM_BHARATPE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      background: #111;
+      background: #1e1e1e;
+      font-family: Arial, sans-serif;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
+      -webkit-text-size-adjust: none;
     }
 
     .mobile-frame {
       position: relative;
-      width: 330px;
-      height: 700px;
-      background: #000;
-      border-radius: 40px;
-      box-shadow: 0 0 30px #000;
+      width: 390px;
+      height: 850px;
+      background: #111;
+      border-radius: 45px;
+      box-shadow: 0 0 40px #000;
       overflow: hidden;
-      border: 6px solid #333;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      color: rgba(255, 255, 255, 0.1);
+      color: rgba(255,255,255,0.9);
     }
 
     .volume-buttons {
@@ -38,110 +39,107 @@
       gap: 12px;
     }
 
-    .volume-up, .volume-down {
+    .volume-up, .volume-down, .power-button {
       width: 6px;
-      height: 40px;
-      background: #666;
       border-radius: 3px;
+      background: #444;
+    }
+
+    .volume-up, .volume-down {
+      height: 40px;
     }
 
     .power-button {
       position: absolute;
       right: -12px;
       top: 150px;
-      width: 6px;
       height: 60px;
-      background: #666;
-      border-radius: 3px;
     }
 
     .screen {
       padding: 20px;
+      box-sizing: border-box;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
       overflow-y: auto;
-      color: rgba(255,255,255,0.1);
     }
 
     .header {
-      margin-bottom: 10px;
       text-align: center;
-      position: relative;
+      margin-bottom: 10px;
     }
 
     .live-time {
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: #888;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #cccccc;
+      font-weight: 500;
     }
 
     h1 {
-      font-size: 24px;
-      color: #fff;
+      font-size: 28px;
+      color: #00ff99;
       margin: 0 0 10px 0;
+      user-select: none;
     }
 
-    .green-text {
-      color: #00ff00;
-    }
-
-    /* New blue heading aligned left */
-    h3.blue-heading {
-      color: #007bff;
-      margin: 0 0 10px 0;
+    .blue-heading {
+      color: #00ccff;
       font-weight: 600;
+      font-size: 18px;
       text-align: left;
-      width: 100%;
+      margin: 15px 0;
     }
 
     .preview {
-      background: #111;
-      padding: 10px;
+      background: #222;
+      padding: 12px;
       border-radius: 10px;
-      color: rgba(255,255,255,0.3);
       margin-bottom: 15px;
-      max-height: 180px;
-      overflow-y: auto;
+      font-size: 0.95rem;
+      color: #bbb;
+      box-shadow: inset 0 0 8px #000;
     }
 
     .preview p {
       margin: 6px 0;
     }
 
-    .upload-section label {
+    label {
+      margin-top: 12px;
       display: block;
-      margin: 12px 0 6px 0;
-      color: rgba(255,255,255,0.3);
+      font-size: 0.9rem;
+      color: #aaa;
     }
 
-    .upload-section input[type="file"] {
-      width: 100%;
-      background-color: #111;
+    input[type="file"] {
+      margin-top: 6px;
+      background: #222;
       color: #ccc;
       padding: 10px;
-      border-radius: 5px;
+      border-radius: 6px;
       border: none;
-      font-size: 14px;
+      width: 100%;
     }
 
     button {
       margin-top: 20px;
-      padding: 12px;
-      background: #222;
-      color: #eee;
-      font-size: 18px;
+      padding: 14px;
+      background-color: #00ff99;
+      color: #000;
+      font-weight: bold;
+      font-size: 1rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      box-shadow: 0 0 6px #00ff99aa;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #333;
-    }
-
-    button:disabled {
-      background-color: #555;
+      background-color: #00cc7a;
+      box-shadow: 0 0 12px #00cc7aaa;
     }
 
     .spinner {
@@ -151,7 +149,7 @@
       width: 30px;
       height: 30px;
       animation: spin 1s linear infinite;
-      margin: 20px auto 0 auto;
+      margin: 16px auto;
       display: none;
     }
 
@@ -162,19 +160,17 @@
 
     .bottom-buttons {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
       align-items: center;
-      padding: 12px 0;
+      padding: 15px 0;
       background: #111;
       border-top: 1px solid #222;
     }
 
-    .home-button, .back-button, .recent-button {
-      width: 24px;
-      height: 24px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      box-shadow: inset 0 0 4px rgba(255,255,255,0.3);
+    .copyright {
+      font-size: 0.75rem;
+      color: #444;
+      text-align: center;
     }
   </style>
 </head>
@@ -189,34 +185,28 @@
     <div class="screen">
       <div class="header">
         <div class="live-time" id="liveDateTime">Loading...</div>
-        <h1>CRM_<span class="green-text">BHARATPE</span></h1><br><br>
-        <h3 class="blue-heading">Add Merchant QR</h3> <!-- New heading aligned left -->
+        <h1>CRM_<span style="color:#00ff99">BHARATPE</span></h1>
+        <h3 class="blue-heading">Add Merchant QR</h3>
       </div>
 
       <div class="preview" id="previewData"></div>
 
-      <div class="upload-section">
-        <label for="qr1">Upload QR Image 1 (Shop QR):</label>
-        <input type="file" id="qr1" accept="image/*" required />
+      <label for="qr1">Upload QR Image 1 (Shop QR):</label>
+      <input type="file" id="qr1" accept="image/*" required />
 
-        <label for="qr2">Upload QR Image 2 (Owner QR):</label>
-        <input type="file" id="qr2" accept="image/*" required />
-      </div>
+      <label for="qr2">Upload QR Image 2 (Owner QR):</label>
+      <input type="file" id="qr2" accept="image/*" required />
 
       <button id="submitBtn">Submit & Continue</button>
       <div class="spinner" id="loadingSpinner"></div>
     </div>
 
     <div class="bottom-buttons">
-	<div class="copyright">
-        © 2025 abhinnabehuria@outlook.com
-      </div>
-    </div>
+      <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
     </div>
   </div>
 
   <script>
-    // Live clock
     function updateDateTime() {
       const now = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
@@ -226,9 +216,7 @@
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
-    // Load from localStorage
     const data = JSON.parse(localStorage.getItem('shopData') || '{}');
-
     document.getElementById('previewData').innerHTML = `
       <p><strong>Shop Name:</strong> ${data.shopName || ''}</p>
       <p><strong>Owner Name:</strong> ${data.ownerName || ''}</p>
@@ -258,7 +246,6 @@
         qr2: await fileToBase64(qr2)
       };
 
-      // Save shop and owner name to localStorage for success.html
       localStorage.setItem('lastShopName', data.shopName || '');
       localStorage.setItem('lastOwnerName', data.ownerName || '');
 

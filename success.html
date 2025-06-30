@@ -3,50 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <title>Success - CRM_BHARATPE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      background: #111;
+      background-color: #1e1e1e;
+      font-family: Arial, sans-serif;
+      color: white;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
       -webkit-text-size-adjust: none;
-      font-family: Arial, sans-serif;
-      color: rgba(255, 255, 255, 0.7);
       overflow: hidden;
     }
     .mobile-frame {
       position: relative;
-      width: 330px;
-      height: 700px;
-      background: #000;
-      border-radius: 40px;
-      box-shadow: 0 0 30px #000;
+      width: 390px;
+      height: 850px;
+      background: #111;
+      border-radius: 45px;
+      box-shadow: 0 0 40px #000;
       overflow: hidden;
-      border: 6px solid #333;
-      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      text-align: center;
-      z-index: 1;
-    }
-    #overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      color: #0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 10;
-      user-select: none;
-      text-align: center;
-      padding: 20px;
     }
     .volume-buttons {
       position: absolute;
@@ -59,7 +40,7 @@
     .volume-up, .volume-down {
       width: 6px;
       height: 40px;
-      background: #666;
+      background: #444;
       border-radius: 3px;
     }
     .power-button {
@@ -68,30 +49,46 @@
       top: 150px;
       width: 6px;
       height: 60px;
-      background: #666;
+      background: #444;
       border-radius: 3px;
     }
     .screen {
       padding: 20px;
+      box-sizing: border-box;
+      color: rgba(255,255,255,0.9);
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      align-items: center;
+      overflow-y: auto;
     }
     .header {
       margin-bottom: 10px;
+      text-align: center;
+      width: 100%;
     }
     .live-time {
-      font-size: 14px;
-      margin-bottom: 6px;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #cccccc;
+      font-weight: 500;
     }
     h1 {
-      font-size: 24px;
-      color: #fff;
+      font-size: 28px;
+      color: #00ff99;
       margin: 0 0 10px 0;
     }
-    .green-text {
-      color: #00ff00;
+    .success {
+      color: #0f0;
+      font-size: 20px;
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+    }
+    #shopInfo {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #0f0;
     }
     .spinner {
       border: 4px solid rgba(255, 255, 255, 0.2);
@@ -106,53 +103,40 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    .success {
-      color: #0f0;
-      font-size: 20px;
-      margin-top: 20px;
-      display: none;
-    }
-    #shopInfo {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #0f0;
-    }
-    /* Emoji style bottom buttons */
     .bottom-buttons {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 12px 0;
-      background: #111;
-      border-top: 1px solid #222;
-      gap: 30px;
-    }
-    .bottom-buttons > div {
-      cursor: pointer;
-      font-size: 30px;
-      color: rgba(0, 255, 0, 0.8);
-      width: 50px;
-      height: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 12px;
+      gap: 30px;
+      padding: 15px 0;
+      background: #111;
+      border-top: 1px solid #222;
+    }
+    .bottom-button {
+      padding: 12px 24px;
+      background: #00ff99aa;
+      border: none;
+      border-radius: 25px;
+      color: #000;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
       transition: background-color 0.3s ease;
-      user-select: none;
+      box-shadow: 0 0 8px #00ff9988;
     }
-    .bottom-buttons > div:hover {
-      background-color: rgba(0, 255, 0, 0.2);
+    .bottom-button:hover {
+      background: #00cc7a;
+      box-shadow: 0 0 14px #00cc7a99;
     }
-
-    /* Hide old nav buttons */
-    .home-button, .back-button, .recent-button {
-      display: none;
+    .copyright {
+      font-size: 0.75rem;
+      color: #444;
+      text-align: center;
+      padding: 8px 0;
     }
   </style>
 </head>
 <body>
-  <div id="overlay">Tap anywhere to <br> hear confirmation</div>
-
   <div class="mobile-frame">
     <div class="volume-buttons">
       <div class="volume-up"></div>
@@ -163,80 +147,37 @@
     <div class="screen">
       <div class="header">
         <div class="live-time" id="liveDateTime">Loading...</div>
-        <h1>CRM_<span class="green-text">BHARATPE</span></h1>
+        <h1>CRM_<span style="color:#00ff99">BHARATPE</span></h1>
       </div>
 
       <div class="spinner" id="spinner"></div>
       <div class="success" id="message">
-        🎉 Congratulations! Your shop is now live on <strong>CRM_BHARATPE</strong>.
+        ✨ Congratulations! Your shop is now live on <strong>CRM_BHARATPE</strong>.
         <div id="shopInfo"></div>
       </div>
     </div>
 
     <div class="bottom-buttons">
-      <div title="Lead Data" onclick="goLeadData()">📋</div>
-      <div title="Home" onclick="goHome()">🏠</div>
-      <div title="Add Lead" onclick="goLeadForm()">➕</div>
+      <button class="bottom-button" onclick="goLeadData()">Lead Data</button>
+      <button class="bottom-button" onclick="goHome()">Home</button>
+      <button class="bottom-button" onclick="goLeadForm()">Add Lead</button>
     </div>
-	 <div class="copyright">
-        © 2025 abhinnabehuria@outlook.com
-      </div>
+
+    <div class="copyright">
+      © 2025 abhinnabehuria@outlook.com
     </div>
   </div>
 
   <script>
     function updateDateTime() {
       const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-      const time = now.toLocaleTimeString();
-      const date = now.toLocaleDateString(undefined, options);
-      document.getElementById('liveDateTime').innerText = `${date} ${time}`;
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-
-    async function uploadToDrive() {
-      return new Promise(resolve => setTimeout(resolve, 3000));
-    }
-
-    function goHome() {
-      window.location.href = 'index.html';
-    }
-    function goLeadData() {
-      window.location.href = 'merchant_data.html';
-    }
-    function goLeadForm() {
-      window.location.href = 'form.html';
-    }
-
-    function speakOnboardMessage() {
-      const message = "Great job! The merchant is now active on the BharatPe Mobile App.";
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.lang = 'en-US';
-        utterance.pitch = 1.2;
-        utterance.rate = 0.9;
-
-        const voices = window.speechSynthesis.getVoices();
-        let selectedVoice = voices.find(v => /male|man|boy|father|dad/i.test(v.name));
-        if (!selectedVoice) {
-          selectedVoice = voices.find(v => v.name.toLowerCase().includes('male'));
-        }
-        if (!selectedVoice && voices.length > 0) {
-          selectedVoice = voices[0];
-        }
-        if (selectedVoice) {
-          utterance.voice = selectedVoice;
-        }
-
-        window.speechSynthesis.speak(utterance);
-      }
+      const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+      document.getElementById('liveDateTime').innerText = now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
     }
 
     function displayShopInfo() {
       const shopName = localStorage.getItem('lastShopName') || 'N/A';
       const ownerName = localStorage.getItem('lastOwnerName') || 'N/A';
-
       document.getElementById('shopInfo').innerHTML = `
         <p><strong>Shop Name:</strong> ${shopName}</p>
         <p><strong>Owner Name:</strong> ${ownerName}</p>
@@ -244,21 +185,19 @@
     }
 
     async function initPage() {
-      await uploadToDrive();
+      await new Promise(resolve => setTimeout(resolve, 3000));
       document.getElementById('spinner').style.display = 'none';
       document.getElementById('message').style.display = 'block';
       displayShopInfo();
     }
 
-    window.addEventListener('load', () => {
-      window.speechSynthesis.onvoiceschanged = () => {};
-      initPage();
-    });
+    function goHome() { window.location.href = 'index.html'; }
+    function goLeadData() { window.location.href = 'merchant_data.html'; }
+    function goLeadForm() { window.location.href = 'form.html'; }
 
-    document.getElementById('overlay').addEventListener('click', () => {
-      speakOnboardMessage();
-      document.getElementById('overlay').style.display = 'none';
-    });
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+    window.addEventListener('load', initPage);
   </script>
 </body>
 </html>
