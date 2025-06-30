@@ -100,13 +100,25 @@
     }
 
     label {
+      font-size: 0.95rem;
       display: flex;
       flex-direction: column;
-      font-size: 0.95rem;
+      gap: 6px;
+    }
+
+    /* Container for label text and digit count on same line */
+    .mobile-label-text {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: normal;
+    }
+
+    .digit-count {
+      font-weight: bold;
     }
 
     input, textarea {
-      margin-top: 6px;
       padding: 10px;
       border-radius: 8px;
       border: none;
@@ -179,6 +191,7 @@
     .screen::-webkit-scrollbar {
       width: 8px;
     }
+
     .screen::-webkit-scrollbar-thumb {
       background-color: #00ff99aa;
       border-radius: 10px;
@@ -186,89 +199,124 @@
   </style>
 </head>
 <body>
-  <div class="mobile-frame">
-    <div class="volume-buttons">
-      <div class="volume-up"></div>
-      <div class="volume-down"></div>
-    </div>
-    <div class="power-button"></div>
+<div class="mobile-frame">
+  <div class="volume-buttons">
+    <div class="volume-up"></div>
+    <div class="volume-down"></div>
+  </div>
+  <div class="power-button"></div>
 
-    <div class="screen">
-      <div class="header">
-        <div class="live-time" id="liveDateTime">Loading...</div>
-        <h1>CRM_<span style="color:#00ff99;">BHARATPE</span></h1>
-        <h3>Add Lead Data</h3>
-      </div>
-
-      <form id="shopForm" autocomplete="off">
-        <label>
-          Shop Name:
-          <input type="text" id="shopName" name="shopName" placeholder="Enter Shop Name" required />
-        </label>
-        <label>
-          Owner Name:
-          <input type="text" id="ownerName" name="ownerName" placeholder="Enter Owner Name" required />
-        </label>
-        <label>
-          Mobile Number:
-          <input type="tel" id="mobile" name="mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}" required />
-        </label>
-        <label>
-          Address:
-          <input type="text" id="address" name="address" placeholder="Enter Address" required />
-        </label>
-        <label>
-          Landmark:
-          <input type="text" id="landmark" name="landmark" placeholder="Enter Landmark (optional)" />
-        </label>
-        <label>
-          Description:
-          <textarea id="description" name="description" placeholder="Enter Description" rows="3" required></textarea>
-        </label>
-
-        <button type="submit" id="submitBtn">Next</button>
-        <div class="spinner" id="loadingSpinner"></div>
-      </form>
+  <div class="screen">
+    <div class="header">
+      <div class="live-time" id="liveDateTime">Loading...</div>
+      <h1>CRM_<span style="color:#00ff99;">BHARATPE</span></h1>
+      <h3>Add Lead Data</h3>
     </div>
 
-    <div class="bottom-buttons">
-      <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
-    </div>
+    <form id="shopForm" autocomplete="off">
+      <label>
+        Shop Name:
+        <input type="text" id="shopName" name="shopName" placeholder="Enter Shop Name" required />
+      </label>
+      <label>
+        Owner Name:
+        <input type="text" id="ownerName" name="ownerName" placeholder="Enter Owner Name" required />
+      </label>
+      <label>
+        <div class="mobile-label-text">
+          Mobile: <span id="digitCount" class="digit-count">(0 digits)</span>
+        </div>
+        <input
+                type="tel"
+                id="mobile"
+                name="mobile"
+                placeholder="10-digit mobile number"
+                required
+                inputmode="numeric"
+                pattern="[0-9]*"
+                maxlength="15"
+                autocomplete="off"
+        />
+      </label>
+      <label>
+        Address:
+        <input type="text" id="address" name="address" placeholder="Enter Address" required />
+      </label>
+      <label>
+        Landmark:
+        <input type="text" id="landmark" name="landmark" placeholder="Enter Landmark (optional)" />
+      </label>
+      <label>
+        Description:
+        <textarea id="description" name="description" placeholder="Enter Description" rows="3" required></textarea>
+      </label>
+
+      <button type="submit" id="submitBtn">Next</button>
+      <div class="spinner" id="loadingSpinner"></div>
+    </form>
   </div>
 
-  <script>
-    function updateDateTime() {
-      const now = new Date();
-      const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-      document.getElementById('liveDateTime').textContent = now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
+  <div class="bottom-buttons">
+    <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
+  </div>
+</div>
+
+<script>
+  function updateDateTime() {
+    const now = new Date();
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    document.getElementById('liveDateTime').textContent =
+      now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+
+  const form = document.getElementById('shopForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const loadingSpinner = document.getElementById('loadingSpinner');
+
+  const mobileInput = document.getElementById('mobile');
+  const digitCountDisplay = document.getElementById('digitCount');
+
+  mobileInput.addEventListener('input', () => {
+    // Remove any non-digit characters to enforce numeric only input
+    mobileInput.value = mobileInput.value.replace(/\D/g, '');
+
+    const length = mobileInput.value.length;
+    digitCountDisplay.textContent = `(${length} digit${length !== 1 ? 's' : ''})`;
+
+    // Color logic
+    if (length === 10) {
+      digitCountDisplay.style.color = 'limegreen';
+    } else if (length > 10) {
+      digitCountDisplay.style.color = 'red';
+    } else if (length >= 1) {
+      digitCountDisplay.style.color = 'orange';
+    } else {
+      digitCountDisplay.style.color = '#ccc';
     }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+  });
 
-    const form = document.getElementById('shopForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const loadingSpinner = document.getElementById('loadingSpinner');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    submitBtn.style.display = 'none';
+    loadingSpinner.style.display = 'block';
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      submitBtn.style.display = 'none';
-      loadingSpinner.style.display = 'block';
+    const formData = {
+      shopName: form.shopName.value.trim(),
+      ownerName: form.ownerName.value.trim(),
+      mobile: form.mobile.value.trim(),
+      address: form.address.value.trim(),
+      landmark: form.landmark.value.trim(),
+      description: form.description.value.trim(),
+    };
 
-      const formData = {
-        shopName: form.shopName.value.trim(),
-        ownerName: form.ownerName.value.trim(),
-        mobile: form.mobile.value.trim(),
-        address: form.address.value.trim(),
-        landmark: form.landmark.value.trim(),
-        description: form.description.value.trim(),
-      };
+    localStorage.setItem('shopData', JSON.stringify(formData));
 
-      localStorage.setItem('shopData', JSON.stringify(formData));
-
-      setTimeout(() => {
-        window.location.href = 'lead_preview_upload.html';
-      }, 1200);
-    });
-  </script>
+    setTimeout(() => {
+      window.location.href = 'lead_preview_upload.html';
+    }, 1200);
+  });
+</script>
 </body>
 </html>

@@ -38,12 +38,14 @@
       flex-direction: column;
       gap: 12px;
     }
+
     .volume-up, .volume-down {
       width: 6px;
       height: 40px;
       background: #444;
       border-radius: 3px;
     }
+
     .power-button {
       position: absolute;
       right: -12px;
@@ -107,10 +109,22 @@
       display: flex;
       flex-direction: column;
       text-align: left;
+      gap: 6px;
+    }
+
+    /* Inline container for label text and digit count */
+    #mobileLabel > div {
+      user-select: none;
+      font-weight: normal;
+    }
+
+    #digitCount {
+      font-weight: bold;
+      margin-left: 6px;
     }
 
     input, textarea {
-      margin-top: 6px;
+      margin-top: 0; /* removed extra margin so label gap works */
       padding: 10px;
       border-radius: 8px;
       border: none;
@@ -186,86 +200,106 @@
   </style>
 </head>
 <body>
-  <div class="mobile-frame">
-    <div class="volume-buttons">
-      <div class="volume-up"></div>
-      <div class="volume-down"></div>
-    </div>
-    <div class="power-button"></div>
+<div class="mobile-frame">
+  <div class="volume-buttons">
+    <div class="volume-up"></div>
+    <div class="volume-down"></div>
+  </div>
+  <div class="power-button"></div>
 
-    <div class="screen">
-      <div class="header">
-        <div class="live-time" id="liveDateTime">Loading...</div>
-        <h1>CRM_<span style="color:#00ff99">BHARATPE</span></h1>
-      </div>
-
-      <div class="section-title">Add Merchant Details</div>
-
-      <form id="shopForm" autocomplete="off">
-        <label>
-          Shop Name:
-          <input type="text" id="shopName" name="shopName" placeholder="Enter Shop Name" required />
-        </label>
-        <label>
-          Owner Name:
-          <input type="text" id="ownerName" name="ownerName" placeholder="Enter Owner Name" required />
-        </label>
-        <label>
-          Mobile Number:
-          <input type="tel" id="mobile" name="mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}" required />
-        </label>
-        <label>
-          Address:
-          <input type="text" id="address" name="address" placeholder="Enter Address" required />
-        </label>
-        <label>
-          Description:
-          <textarea id="description" name="description" placeholder="Enter Description" rows="3" required></textarea>
-        </label>
-
-        <button type="submit" id="submitBtn">Next</button>
-        <div class="spinner" id="loadingSpinner"></div>
-      </form>
+  <div class="screen">
+    <div class="header">
+      <div class="live-time" id="liveDateTime">Loading...</div>
+      <h1>CRM_<span style="color:#00ff99">BHARATPE</span></h1>
     </div>
 
-    <div class="bottom-buttons">
-      <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
-    </div>
+    <div class="section-title">Add Merchant Details</div>
+
+    <form id="shopForm" autocomplete="off">
+      <label>
+        Shop Name:
+        <input type="text" id="shopName" name="shopName" placeholder="Enter Shop Name" required />
+      </label>
+      <label>
+        Owner Name:
+        <input type="text" id="ownerName" name="ownerName" placeholder="Enter Owner Name" required />
+      </label>
+      <label id="mobileLabel">
+        <div>
+          Mobile:<span id="digitCount"></span>
+        </div>
+        <input type="number" id="mobile" name="mobile" placeholder="10-digit mobile number" required />
+      </label>
+      <label>
+        Address:
+        <input type="text" id="address" name="address" placeholder="Enter Address" required />
+      </label>
+      <label>
+        Description:
+        <textarea id="description" name="description" placeholder="Enter Description" rows="3" required></textarea>
+      </label>
+
+      <button type="submit" id="submitBtn">Next</button>
+      <div class="spinner" id="loadingSpinner"></div>
+    </form>
   </div>
 
-  <script>
-    function updateDateTime() {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-      document.getElementById('liveDateTime').textContent = 
-        now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
+  <div class="bottom-buttons">
+    <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
+  </div>
+</div>
+
+<script>
+  function updateDateTime() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    document.getElementById('liveDateTime').textContent =
+      now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+
+  const form = document.getElementById('shopForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const loadingSpinner = document.getElementById('loadingSpinner');
+  const mobileInput = document.getElementById('mobile');
+  const digitCount = document.getElementById('digitCount');
+
+  mobileInput.addEventListener('input', () => {
+    const digitsOnly = mobileInput.value.replace(/\D/g, '');
+    const count = digitsOnly.length;
+    digitCount.textContent = `(${count} digit${count !== 1 ? 's' : ''})`;
+
+    if (count === 10) {
+      digitCount.style.color = 'limegreen';
+    } else if (count > 10) {
+      digitCount.style.color = 'red';
+    } else if (count >= 1) {
+      digitCount.style.color = 'orange';
+    } else {
+      digitCount.style.color = '#bbb';
     }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+  });
 
-    const form = document.getElementById('shopForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const loadingSpinner = document.getElementById('loadingSpinner');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    submitBtn.style.display = 'none';
+    loadingSpinner.style.display = 'block';
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      submitBtn.style.display = 'none';
-      loadingSpinner.style.display = 'block';
+    const formData = {
+      shopName: form.shopName.value.trim(),
+      ownerName: form.ownerName.value.trim(),
+      mobile: form.mobile.value.trim(),
+      address: form.address.value.trim(),
+      description: form.description.value.trim(),
+    };
 
-      const formData = {
-        shopName: form.shopName.value.trim(),
-        ownerName: form.ownerName.value.trim(),
-        mobile: form.mobile.value.trim(),
-        address: form.address.value.trim(),
-        description: form.description.value.trim(),
-      };
+    localStorage.setItem('shopData', JSON.stringify(formData));
 
-      localStorage.setItem('shopData', JSON.stringify(formData));
-
-      setTimeout(() => {
-        window.location.href = 'preview-upload.html';
-      }, 1200);
-    });
-  </script>
+    setTimeout(() => {
+      window.location.href = 'preview-upload.html';
+    }, 1200);
+  });
+</script>
 </body>
 </html>
