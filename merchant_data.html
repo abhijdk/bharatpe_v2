@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Merchant Data - CRM_BHARATPE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       background: #111;
@@ -85,7 +86,6 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Modal Styles */
     .modal {
       display: none;
       position: fixed;
@@ -136,172 +136,180 @@
     .home-btn:hover {
       background-color: #33ff33;
     }
+
+    .copyright {
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 20px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Merchant Data</h1>
+<h1>Merchant Data</h1>
 
-  <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search by Name, Shop, Mobile, Address">
-    <button onclick="searchMerchant()">Search</button>
+<div class="search-container">
+  <input type="text" id="searchInput" placeholder="Search by Name, Shop, Mobile, Address">
+  <button onclick="searchMerchant()">Search</button>
+</div>
+
+<div class="spinner" id="spinner"></div>
+
+<table id="merchantTable" style="display:none">
+  <thead>
+  <tr id="tableHead"></tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<!-- Modal -->
+<div id="searchModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Search Results</h2>
+    <div id="searchResults"></div>
   </div>
+</div>
 
-  <div class="spinner" id="spinner"></div>
+<!-- Home Button -->
+<button class="home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+<div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
 
-  <table id="merchantTable" style="display:none">
-    <thead>
-      <tr id="tableHead"></tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5712gfMeZiOzTtIN21hA9qCfZhG5ori5S9fZrImtjneyqncqbPxosfEXpSc3ndpHZ/exec';
+  let merchantData = [];
 
-  <!-- Modal -->
-  <div id="searchModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h2>Search Results</h2>
-      <div id="searchResults"></div>
-    </div>
-  </div>
+  async function fetchMerchantData() {
+    try {
+      const res = await fetch(SCRIPT_URL);
+      const data = await res.json();
+      merchantData = data;
 
-  <!-- Home Button -->
-  <button class="home-btn" onclick="window.location.href='index.html'">🏠 Home</button><br>
-  
-  
-  
-	 <div class="copyright">
-        © 2025 abhinnabehuria@outlook.com
-      </div>
-    </div>
+      if (data.length === 0) return;
 
-  <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5712gfMeZiOzTtIN21hA9qCfZhG5ori5S9fZrImtjneyqncqbPxosfEXpSc3ndpHZ/exec';
-    let merchantData = [];
+      const table = document.getElementById('merchantTable');
+      const head = document.getElementById('tableHead');
+      const body = document.getElementById('tableBody');
 
-    async function fetchMerchantData() {
-      try {
-        const res = await fetch(SCRIPT_URL);
-        const data = await res.json();
-        merchantData = data;
+      const keys = Object.keys(data[0]);
 
-        if (data.length === 0) return;
+      // Serial Number header
+      const thSN = document.createElement('th');
+      thSN.textContent = 'S.No';
+      head.appendChild(thSN);
 
-        const table = document.getElementById('merchantTable');
-        const head = document.getElementById('tableHead');
-        const body = document.getElementById('tableBody');
+      keys.forEach(key => {
+        const th = document.createElement('th');
+        th.textContent = key;
+        head.appendChild(th);
+      });
 
-        const keys = Object.keys(data[0]);
+      data.forEach((row, index) => {
+        const tr = document.createElement('tr');
 
-        // Add Serial Number header
-        const thSN = document.createElement('th');
-        thSN.textContent = 'S.No';
-        head.appendChild(thSN);
+        const sn = document.createElement('td');
+        sn.textContent = index + 1;
+        tr.appendChild(sn);
 
         keys.forEach(key => {
-          const th = document.createElement('th');
-          th.textContent = key;
-          head.appendChild(th);
+          const td = document.createElement('td');
+          td.textContent = row[key];
+          tr.appendChild(td);
         });
 
-        data.forEach((row, index) => {
-          const tr = document.createElement('tr');
+        body.appendChild(tr);
+      });
 
-          const sn = document.createElement('td');
-          sn.textContent = index + 1;
-          tr.appendChild(sn);
+      document.getElementById('spinner').style.display = 'none';
+      table.style.display = 'table';
+    } catch (err) {
+      console.error('Failed to fetch merchant data:', err);
+    }
+  }
 
-          keys.forEach(key => {
-            const td = document.createElement('td');
-            td.textContent = row[key];
-            tr.appendChild(td);
-          });
+  function searchMerchant() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    if (!query) return;
 
-          body.appendChild(tr);
-        });
+    const container = document.getElementById('searchResults');
+    container.innerHTML = '';
 
-        document.getElementById('spinner').style.display = 'none';
-        table.style.display = 'table';
-      } catch (err) {
-        console.error('Failed to fetch merchant data:', err);
-      }
+    const filtered = merchantData.filter(row =>
+      Object.values(row).some(val =>
+        String(val).toLowerCase().includes(query)
+      )
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<p>No matching records found.</p>';
+    } else {
+      const keys = Object.keys(merchantData[0]);
+      const shopKey = keys.find(k => k.toLowerCase().includes('shop')) || 'Shop Name';
+      const ownerKey = keys.find(k => k.toLowerCase().includes('owner')) || 'Owner Name';
+      const mobileKey = keys.find(k => k.toLowerCase().includes('mobile') || k.toLowerCase().includes('phone')) || 'Mobile';
+
+      const table = document.createElement('table');
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+
+      const thead = document.createElement('thead');
+      const trHead = document.createElement('tr');
+      ['S.No', 'Shop Name', 'Owner Name', 'Mobile'].forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        th.style.border = '1px solid #444';
+        th.style.backgroundColor = '#222';
+        th.style.color = '#0f0';
+        th.style.padding = '8px';
+        trHead.appendChild(th);
+      });
+      thead.appendChild(trHead);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      filtered.forEach((row, index) => {
+        const tr = document.createElement('tr');
+
+        const sn = document.createElement('td');
+        sn.textContent = index + 1;
+        sn.style.border = '1px solid #444';
+        sn.style.padding = '8px';
+        tr.appendChild(sn);
+
+        const shop = document.createElement('td');
+        shop.textContent = row[shopKey] || '-';
+        shop.style.border = '1px solid #444';
+        shop.style.padding = '8px';
+        tr.appendChild(shop);
+
+        const owner = document.createElement('td');
+        owner.textContent = row[ownerKey] || '-';
+        owner.style.border = '1px solid #444';
+        owner.style.padding = '8px';
+        tr.appendChild(owner);
+
+        const mobile = document.createElement('td');
+        mobile.textContent = row[mobileKey] || '-';
+        mobile.style.border = '1px solid #444';
+        mobile.style.padding = '8px';
+        tr.appendChild(mobile);
+
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      container.appendChild(table);
     }
 
-    function searchMerchant() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      if (!query) return;
+    document.getElementById('searchModal').style.display = 'block';
+  }
 
-      const container = document.getElementById('searchResults');
-      container.innerHTML = '';
+  function closeModal() {
+    document.getElementById('searchModal').style.display = 'none';
+  }
 
-      const filtered = merchantData.filter(row =>
-        Object.values(row).some(val =>
-          String(val).toLowerCase().includes(query)
-        )
-      );
-
-      if (filtered.length === 0) {
-        container.innerHTML = '<p>No matching records found.</p>';
-      } else {
-        // Smart key detection
-        const keys = Object.keys(merchantData[0]);
-        const shopKey = keys.find(k => k.toLowerCase().includes('shop')) || 'Shop Name';
-        const ownerKey = keys.find(k => k.toLowerCase().includes('owner')) || 'Owner Name';
-        const mobileKey = keys.find(k => k.toLowerCase().includes('mobile') || k.toLowerCase().includes('phone')) || 'Mobile Number';
-
-        const table = document.createElement('table');
-        table.style.width = '100%';
-        table.style.borderCollapse = 'collapse';
-
-        const thead = document.createElement('thead');
-        const trHead = document.createElement('tr');
-        ['S.No', 'Shop Name', 'Owner Name', 'Mobile Number'].forEach(header => {
-          const th = document.createElement('th');
-          th.textContent = header;
-          th.style.border = '1px solid #444';
-          trHead.appendChild(th);
-        });
-        thead.appendChild(trHead);
-        table.appendChild(thead);
-
-        const tbody = document.createElement('tbody');
-        filtered.forEach((row, index) => {
-          const tr = document.createElement('tr');
-
-          const sn = document.createElement('td');
-          sn.textContent = index + 1;
-          sn.style.border = '1px solid #444';
-          tr.appendChild(sn);
-
-          const shop = document.createElement('td');
-          shop.textContent = row[shopKey] || '-';
-          shop.style.border = '1px solid #444';
-          tr.appendChild(shop);
-
-          const owner = document.createElement('td');
-          owner.textContent = row[ownerKey] || '-';
-          owner.style.border = '1px solid #444';
-          tr.appendChild(owner);
-
-          const mobile = document.createElement('td');
-          mobile.textContent = row[mobileKey] || '-';
-          mobile.style.border = '1px solid #444';
-          tr.appendChild(mobile);
-
-          tbody.appendChild(tr);
-        });
-        table.appendChild(tbody);
-        container.appendChild(table);
-      }
-
-      document.getElementById('searchModal').style.display = 'block';
-    }
-
-    function closeModal() {
-      document.getElementById('searchModal').style.display = 'none';
-    }
-
-    fetchMerchantData();
-  </script>
+  fetchMerchantData();
+</script>
 </body>
 </html>
