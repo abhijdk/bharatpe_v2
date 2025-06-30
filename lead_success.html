@@ -3,36 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <title>Submission Success - CRM_BHARATPE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      background: #111;
-      margin: 0;
-      -webkit-text-size-adjust: none;
+      background-color: #1e1e1e;
       font-family: Arial, sans-serif;
-      color: rgba(255, 255, 255, 0.7);
+      color: white;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
+      -webkit-text-size-adjust: none;
     }
+
     .mobile-frame {
       position: relative;
-      width: 330px;
-      height: 700px;
-      background: #000;
-      border-radius: 40px;
-      box-shadow: 0 0 30px #000;
+      width: 390px;
+      height: 850px;
+      background: #111;
+      border-radius: 45px;
+      box-shadow: 0 0 40px #000;
       overflow: hidden;
-      border: 6px solid #333;
-      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 20px 30px 40px;
-      color: rgba(255, 255, 255, 0.8);
-      text-align: center;
     }
+
     .volume-buttons {
       position: absolute;
       left: -12px;
@@ -40,91 +37,127 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      z-index: 10;
     }
+
     .volume-up, .volume-down {
       width: 6px;
       height: 40px;
-      background: #666;
+      background: #444;
       border-radius: 3px;
     }
+
     .power-button {
       position: absolute;
       right: -12px;
       top: 150px;
       width: 6px;
       height: 60px;
-      background: #666;
+      background: #444;
       border-radius: 3px;
-      z-index: 10;
     }
+
+    .screen {
+      padding: 20px;
+      box-sizing: border-box;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+    }
+
     .header {
-      margin-bottom: 15px;
+      margin-bottom: 10px;
+      text-align: center;
+      width: 100%;
     }
+
     .live-time {
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: #888;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #cccccc;
+      font-weight: 500;
     }
+
     h1 {
       font-size: 28px;
-      margin: 0 0 0.5em 0;
-      color: #0f0;
+      color: #00ff99;
+      margin: 0 0 10px 0;
+      user-select: none;
     }
-    p {
-      font-size: 18px;
-      margin: 0.3em 0;
-      color: rgba(255, 255, 255, 0.8);
-    }
-    .highlight {
-      color: #00ff00;
-      font-weight: bold;
-    }
+
     .message-box {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.2);
       border-radius: 20px;
       padding: 20px;
-      margin: 20px auto;
+      margin: 20px 0;
       max-width: 90%;
-      color: #0f0;
-      box-shadow: 0 0 15px #00ff00aa;
+      color: #00ff99;
+      box-shadow: 0 0 15px #00ff99aa;
       transition: background-color 1.5s ease;
       user-select: none;
     }
-    .bottom-buttons {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 12px 0;
-      background: #111;
-      border-top: 1px solid #222;
-      margin-top: 20px;
-      gap: 30px;
+
+    .message-box h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
     }
-    .bottom-buttons > div {
-      cursor: pointer;
-      font-size: 30px;
-      color: rgba(0, 255, 0, 0.8);
-      width: 50px;
-      height: 50px;
+
+    .message-box p {
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #00ff99;
+    }
+
+    .bottom-buttons {
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 12px;
-      transition: background-color 0.3s ease;
+      gap: 30px;
+      padding: 15px 0;
+      background: #111;
+      border-top: 1px solid #222;
       user-select: none;
     }
-    .bottom-buttons > div:hover {
-      background-color: rgba(0, 255, 0, 0.2);
-    }
-    /* keep existing button styles for old nav */
-    .home-button, .back-button, .recent-button {
-      width: 24px;
-      height: 24px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      box-shadow: inset 0 0 4px rgba(255,255,255,0.3);
+
+    .bottom-button {
+      padding: 12px 24px;
+      background: #00ff99aa;
+      border: none;
+      border-radius: 25px;
+      color: #000;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 0 8px #00ff9988;
+    }
+
+    .bottom-button:hover {
+      background: #00cc7a;
+      box-shadow: 0 0 14px #00cc7a99;
+    }
+
+    .copyright {
+      font-size: 0.75rem;
+      color: #444;
+      text-align: center;
+      padding-bottom: 10px;
+      user-select: none;
+    }
+
+    .screen::-webkit-scrollbar {
+      width: 8px;
+    }
+    .screen::-webkit-scrollbar-thumb {
+      background-color: #00ff99aa;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -136,45 +169,31 @@
     </div>
     <div class="power-button"></div>
 
-    <div class="header">
-      <div class="live-time" id="liveDateTime">Loading...</div>
-      <h1>CRM_<span style="color:#00ff00;">BHARATPE</span></h1>
-    </div>
-
-    <div class="message-box" id="messageBox">
-      <h1>Congratulations! 🎉</h1>
-      <p>Lead submitted successfully for:</p>
-      <p><strong>Owner Name:</strong> <span id="ownerName" class="highlight">SILU</span></p>
-      <p><strong>Shop Name:</strong> <span id="shopName" class="highlight">CHANCHALA</span></p>
-      <p>Thank you for your submission.<br>We will get back to you soon!</p>
-    </div>
-
-    <!-- New navigation buttons with emojis -->
-    <div class="bottom-buttons">
-      <div title="Lead Data" onclick="goLeadData()">📋</div>
-      <div title="Home" onclick="goHome()">🏠</div>
-      <div title="Add Lead" onclick="goLeadForm()">➕</div>
-	  
-	  
-    </div>
-	
-	 <div class="copyright">
-        © 2025 abhinnabehuria@outlook.com
+    <div class="screen">
+      <div class="header">
+        <div class="live-time" id="liveDateTime">Loading...</div>
+        <h1>CRM_<span style="color:#00ff99;">BHARATPE</span></h1>
       </div>
-    </div>
 
-    <!-- Old nav buttons (optional to keep or remove) -->
-    <!--
-    <div class="bottom-buttons">
-      <div class="home-button" title="Home" onclick="goHome()"></div>
-      <div class="back-button" title="Back" onclick="goBack()"></div>
-      <div class="recent-button" title="Recent"></div>
+      <div class="message-box" id="messageBox">
+        <h1>🎉 Congratulations!</h1>
+        <p>Lead submitted successfully for:</p>
+        <p><strong>Owner Name:</strong> <span id="ownerName" class="highlight">SILU</span></p>
+        <p><strong>Shop Name:</strong> <span id="shopName" class="highlight">CHANCHALA</span></p>
+        <p>Thank you for your submission.<br>We will get back to you soon!</p>
+      </div>
+
+      <div class="bottom-buttons">
+        <button class="bottom-button" onclick="goLeadData()">📋 Leads</button>
+        <button class="bottom-button" onclick="goHome()">🏠 Home</button>
+        <button class="bottom-button" onclick="goLeadForm()">➕ Add Lead</button>
+      </div>
+
+      <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
     </div>
-    -->
   </div>
 
   <script>
-    // Live date-time updater
     function updateDateTime() {
       const now = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
@@ -185,7 +204,6 @@
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
-    // Color cycle for the message box opacity of black background
     const opacities = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
     let idx = 0;
     const messageBox = document.getElementById('messageBox');
@@ -195,15 +213,12 @@
       messageBox.style.backgroundColor = `rgba(0, 0, 0, ${opacities[idx]})`;
     }, 2000);
 
-    // Set owner/shop from URL params or default
     const params = new URLSearchParams(window.location.search);
     const ownerName = params.get('ownerName') || 'SILU';
     const shopName = params.get('shopName') || 'CHANCHALA';
-
     document.getElementById('ownerName').textContent = ownerName;
     document.getElementById('shopName').textContent = shopName;
 
-    // Navigation functions
     function goHome() {
       window.location.href = 'index.html';
     }
@@ -212,9 +227,6 @@
     }
     function goLeadForm() {
       window.location.href = 'lead_form.html';
-    }
-    function goBack() {
-      window.history.back();
     }
   </script>
 </body>
