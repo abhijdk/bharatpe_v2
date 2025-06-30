@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Lead Data - CRM_BHARATPE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
@@ -25,41 +25,61 @@
 
     .search-container {
       margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      max-width: 400px;
+      width: 100%;
+      align-items: center;
     }
 
     input[type="text"] {
       padding: 10px;
       font-size: 16px;
-      width: 250px;
+      flex-grow: 1;
       border: 1px solid #444;
       background-color: #222;
       color: #fff;
       border-radius: 5px;
+      min-width: 0; /* fix flex shrink */
     }
 
     button {
       padding: 10px 15px;
       font-size: 16px;
-      margin-left: 10px;
       cursor: pointer;
       background-color: #00ff00;
       border: none;
       border-radius: 5px;
       color: #000;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Scroll container to allow horizontal scroll on small screens */
+    .table-container {
+      width: 100%;
+      max-width: 1000px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch; /* smooth scroll for iOS */
+      margin-bottom: 20px;
+      border: 1px solid #444;
+      background: #000;
+      border-radius: 5px;
     }
 
     table {
       width: 100%;
-      max-width: 1000px;
       border-collapse: collapse;
-      background: #000;
-      border: 1px solid #444;
+      min-width: 600px; /* keep minimum width to prevent column collapse */
+      background-color: #000;
     }
 
     th, td {
-      padding: 10px;
+      padding: 10px 12px;
       border: 1px solid #444;
       text-align: left;
+      white-space: nowrap; /* prevent cell content from wrapping */
     }
 
     th {
@@ -107,6 +127,7 @@
       width: 90%;
       max-width: 800px;
       color: #0f0;
+      border-radius: 5px;
     }
 
     .close {
@@ -131,6 +152,7 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .home-btn:hover {
@@ -143,6 +165,32 @@
       margin-top: 20px;
       text-align: center;
     }
+
+    /* Responsive adjustments for smaller screens */
+    @media screen and (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .search-container {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 100%;
+      }
+      input[type="text"], button {
+        width: 100%;
+        margin: 0;
+      }
+      button {
+        margin-top: 10px;
+      }
+      th, td {
+        padding: 6px 8px;
+        font-size: 14px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -150,20 +198,23 @@
 <h1>Lead Data</h1>
 
 <div class="search-container">
-  <input type="text" id="searchInput" placeholder="Search by Name, Shop, Mobile, Address">
+  <input type="text" id="searchInput" placeholder="Search by Name, Shop, Mobile, Address" />
   <button onclick="searchMerchant()">Search</button>
 </div>
 
 <div class="spinner" id="spinner"></div>
 
-<table id="merchantTable" style="display:none">
-  <thead>
-  <tr id="tableHead"></tr>
-  </thead>
-  <tbody id="tableBody"></tbody>
-</table>
+<!-- Wrap table in container to allow horizontal scroll on mobile -->
+<div class="table-container" id="tableWrapper" style="display:none;">
+  <table id="merchantTable">
+    <thead>
+    <tr id="tableHead"></tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
 
-<!-- Modal -->
+<!-- Modal for search results -->
 <div id="searchModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
@@ -188,21 +239,24 @@
 
       if (data.length === 0) return;
 
-      const table = document.getElementById('merchantTable');
-      const head = document.getElementById('tableHead');
-      const body = document.getElementById('tableBody');
+      const tableHead = document.getElementById('tableHead');
+      const tableBody = document.getElementById('tableBody');
 
       const keys = Object.keys(data[0]);
+
+      // Clear previous content if any
+      tableHead.innerHTML = '';
+      tableBody.innerHTML = '';
 
       // Add Serial Number header
       const thSN = document.createElement('th');
       thSN.textContent = 'S.No';
-      head.appendChild(thSN);
+      tableHead.appendChild(thSN);
 
       keys.forEach(key => {
         const th = document.createElement('th');
         th.textContent = key;
-        head.appendChild(th);
+        tableHead.appendChild(th);
       });
 
       data.forEach((row, index) => {
@@ -218,13 +272,15 @@
           tr.appendChild(td);
         });
 
-        body.appendChild(tr);
+        tableBody.appendChild(tr);
       });
 
       document.getElementById('spinner').style.display = 'none';
-      table.style.display = 'table';
+      document.getElementById('tableWrapper').style.display = 'block';
     } catch (err) {
       console.error('Failed to fetch Lead data:', err);
+      document.getElementById('spinner').style.display = 'none';
+      alert('Failed to load lead data.');
     }
   }
 
@@ -254,6 +310,7 @@
       table.style.borderCollapse = 'collapse';
       table.style.backgroundColor = '#000';
       table.style.color = '#eee';
+      table.style.minWidth = '400px';
 
       const thead = document.createElement('thead');
       const trHead = document.createElement('tr');
@@ -264,6 +321,7 @@
         th.style.backgroundColor = '#222';
         th.style.color = '#0f0';
         th.style.padding = '8px';
+        th.style.whiteSpace = 'nowrap';
         trHead.appendChild(th);
       });
       thead.appendChild(trHead);
@@ -277,24 +335,28 @@
         sn.textContent = index + 1;
         sn.style.border = '1px solid #444';
         sn.style.padding = '8px';
+        sn.style.whiteSpace = 'nowrap';
         tr.appendChild(sn);
 
         const shop = document.createElement('td');
         shop.textContent = row[shopKey] || '-';
         shop.style.border = '1px solid #444';
         shop.style.padding = '8px';
+        shop.style.whiteSpace = 'nowrap';
         tr.appendChild(shop);
 
         const owner = document.createElement('td');
         owner.textContent = row[ownerKey] || '-';
         owner.style.border = '1px solid #444';
         owner.style.padding = '8px';
+        owner.style.whiteSpace = 'nowrap';
         tr.appendChild(owner);
 
         const mobile = document.createElement('td');
         mobile.textContent = row[mobileKey] || '-';
         mobile.style.border = '1px solid #444';
         mobile.style.padding = '8px';
+        mobile.style.whiteSpace = 'nowrap';
         tr.appendChild(mobile);
 
         tbody.appendChild(tr);
