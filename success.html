@@ -21,7 +21,7 @@
     .mobile-frame {
       position: relative;
       width: 390px;  /* 6.6 inch width */
-      height: 750px; /* 6.6 inch height */
+      max-height: 100vh; /* adapt to viewport height */
       background: #111; /* a bit darker than body */
       border-radius: 45px;
       box-shadow: 0 0 40px #000;
@@ -32,6 +32,7 @@
       text-align: center;
       user-select: none;
       z-index: 1;
+      height: 100%;
     }
     /* Volume and power buttons from first page */
     .volume-buttons {
@@ -68,6 +69,7 @@
       justify-content: flex-start;
       overflow-y: auto;
       color: rgba(255,255,255,0.9);
+      padding-bottom: 80px; /* extra bottom padding for buttons */
     }
     .header {
       margin-bottom: 10px;
@@ -120,6 +122,7 @@
       align-items: center;
       gap: 30px;
       padding: 15px 0;
+      padding-bottom: env(safe-area-inset-bottom, 15px); /* iOS safe area */
       background: #111;
       border-top: 1px solid #222;
       user-select: none;
@@ -137,8 +140,10 @@
       transition: background-color 0.3s ease;
       user-select: none;
     }
-    .bottom-buttons > div:hover {
+    .bottom-buttons > div:hover,
+    .bottom-buttons > div:focus {
       background-color: rgba(0, 255, 153, 0.2);
+      outline: none;
     }
     /* Copyright */
     .copyright {

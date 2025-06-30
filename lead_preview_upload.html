@@ -1,4 +1,3 @@
-<!-- Save this as preview_upload.html or the relevant file name -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,6 +81,41 @@
       user-select: none;
     }
 
+    .photo-previews {
+      display: flex;
+      gap: 16px;
+      margin: 10px 0;
+    }
+
+    .photo-preview-wrapper {
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .photo-previews h4 {
+      color: #888;
+      font-size: 0.9rem;
+      margin: 6px 0 8px;
+    }
+
+    /* Preview images act as upload button */
+    .photo-previews img {
+      width: 100%;
+      border-radius: 10px;
+      background: #222;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      user-select: none;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+      border: 2px dashed #555;
+    }
+    .photo-previews img:hover {
+      box-shadow: 0 0 8px #00ff99;
+      border-color: #00ff99;
+    }
+
     .preview {
       background: #222;
       padding: 12px;
@@ -94,47 +128,6 @@
 
     .preview p {
       margin: 6px 0;
-    }
-
-    .photo-previews {
-      display: flex;
-      gap: 16px;
-      margin: 10px 0;
-    }
-
-    .photo-previews > div {
-      flex: 1;
-      min-width: 120px;
-    }
-
-    .photo-previews h4 {
-      color: #888;
-      font-size: 0.9rem;
-      margin: 0 0 6px;
-    }
-
-    .photo-previews img {
-      width: 100%;
-      border-radius: 10px;
-      background: #222;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-    }
-
-    label {
-      color: #ccc;
-      margin-top: 10px;
-      display: block;
-      font-size: 0.9rem;
-    }
-
-    input[type="file"] {
-      background-color: #111;
-      color: #ccc;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      width: 100%;
     }
 
     .action-button {
@@ -181,6 +174,11 @@
       padding: 8px 0 0;
       user-select: none;
     }
+
+    /* Hide the native file inputs */
+    input[type="file"] {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -198,23 +196,19 @@
       </div>
 
       <div class="photo-previews">
-        <div>
+        <div class="photo-preview-wrapper">
           <h4>Shop Photo</h4>
-          <img id="shopPhotoPreview" src="" alt="Shop Photo" />
+          <img id="shopPhotoPreview" src="" alt="Shop Photo" title="Click to upload shop photo" />
+          <input type="file" id="qr1" accept="image/*" required />
         </div>
-        <div>
+        <div class="photo-preview-wrapper">
           <h4>Owner Photo</h4>
-          <img id="ownerPhotoPreview" src="" alt="Owner Photo" />
+          <img id="ownerPhotoPreview" src="" alt="Owner Photo" title="Click to upload owner photo" />
+          <input type="file" id="qr2" accept="image/*" required />
         </div>
       </div>
 
       <div class="preview" id="previewData"></div>
-
-      <label for="qr1">Upload Shop Photo:</label>
-      <input type="file" id="qr1" accept="image/*" required />
-
-      <label for="qr2">Upload Owner Photo:</label>
-      <input type="file" id="qr2" accept="image/*" required />
 
       <button class="action-button" id="submitBtn">Submit & Continue</button>
       <div class="spinner" id="loadingSpinner"></div>
@@ -245,9 +239,34 @@
     const submitBtn = document.getElementById('submitBtn');
     const loadingSpinner = document.getElementById('loadingSpinner');
 
+    const shopPhotoInput = document.getElementById('qr1');
+    const ownerPhotoInput = document.getElementById('qr2');
+    const shopPhotoPreview = document.getElementById('shopPhotoPreview');
+    const ownerPhotoPreview = document.getElementById('ownerPhotoPreview');
+
+    // Clicking on preview images triggers respective file input click
+    shopPhotoPreview.addEventListener('click', () => shopPhotoInput.click());
+    ownerPhotoPreview.addEventListener('click', () => ownerPhotoInput.click());
+
+    function updateImagePreview(input, preview) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => preview.src = e.target.result;
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        preview.src = '';
+      }
+    }
+
+    shopPhotoInput.addEventListener('change', () => updateImagePreview(shopPhotoInput, shopPhotoPreview));
+    ownerPhotoInput.addEventListener('change', () => updateImagePreview(ownerPhotoInput, ownerPhotoPreview));
+
+    if (data.qr1) shopPhotoPreview.src = data.qr1;
+    if (data.qr2) ownerPhotoPreview.src = data.qr2;
+
     submitBtn.addEventListener('click', async () => {
-      const qr1 = document.getElementById('qr1').files[0];
-      const qr2 = document.getElementById('qr2').files[0];
+      const qr1 = shopPhotoInput.files[0];
+      const qr2 = ownerPhotoInput.files[0];
 
       if (!qr1 || !qr2) {
         alert("Please upload both images.");
@@ -293,27 +312,6 @@
         reader.readAsDataURL(file);
       });
     }
-
-    const shopPhotoInput = document.getElementById('qr1');
-    const ownerPhotoInput = document.getElementById('qr2');
-    const shopPhotoPreview = document.getElementById('shopPhotoPreview');
-    const ownerPhotoPreview = document.getElementById('ownerPhotoPreview');
-
-    function updateImagePreview(input, preview) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => preview.src = e.target.result;
-        reader.readAsDataURL(input.files[0]);
-      } else {
-        preview.src = '';
-      }
-    }
-
-    shopPhotoInput.addEventListener('change', () => updateImagePreview(shopPhotoInput, shopPhotoPreview));
-    ownerPhotoInput.addEventListener('change', () => updateImagePreview(ownerPhotoInput, ownerPhotoPreview));
-
-    if (data.qr1) shopPhotoPreview.src = data.qr1;
-    if (data.qr2) ownerPhotoPreview.src = data.qr2;
   </script>
 </body>
 </html>
