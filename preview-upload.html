@@ -172,6 +172,34 @@
       color: #444;
       text-align: center;
     }
+
+    /* Added preview images styles */
+    .photo-previews {
+      display: flex;
+      gap: 16px;
+      margin: 10px 0 20px 0;
+    }
+
+    .photo-previews > div {
+      flex: 1;
+      min-width: 140px;
+      text-align: center;
+    }
+
+    .photo-previews h4 {
+      color: #888;
+      font-size: 0.9rem;
+      margin: 0 0 6px;
+    }
+
+    .photo-previews img {
+      width: 100%;
+      border-radius: 10px;
+      background: #222;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      max-height: 140px;
+    }
   </style>
 </head>
 <body>
@@ -190,6 +218,18 @@
       </div>
 
       <div class="preview" id="previewData"></div>
+
+      <!-- Added photo previews container -->
+      <div class="photo-previews">
+        <div>
+          <h4>QR Image 1 Preview</h4>
+          <img id="qr1Preview" alt="QR Image 1 Preview" src="" />
+        </div>
+        <div>
+          <h4>QR Image 2 Preview</h4>
+          <img id="qr2Preview" alt="QR Image 2 Preview" src="" />
+        </div>
+      </div>
 
       <label for="qr1">Upload QR Image 1 (Shop QR):</label>
       <input type="file" id="qr1" accept="image/*" required />
@@ -225,12 +265,33 @@
       <p><strong>Description:</strong> ${data.description || ''}</p>
     `;
 
+    // Preview images elements
+    const qr1Input = document.getElementById('qr1');
+    const qr2Input = document.getElementById('qr2');
+    const qr1Preview = document.getElementById('qr1Preview');
+    const qr2Preview = document.getElementById('qr2Preview');
+
+    function updateImagePreview(input, preview) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          preview.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        preview.src = '';
+      }
+    }
+
+    qr1Input.addEventListener('change', () => updateImagePreview(qr1Input, qr1Preview));
+    qr2Input.addEventListener('change', () => updateImagePreview(qr2Input, qr2Preview));
+
     const submitBtn = document.getElementById('submitBtn');
     const loadingSpinner = document.getElementById('loadingSpinner');
 
     submitBtn.addEventListener('click', async () => {
-      const qr1 = document.getElementById('qr1').files[0];
-      const qr2 = document.getElementById('qr2').files[0];
+      const qr1 = qr1Input.files[0];
+      const qr2 = qr2Input.files[0];
 
       if (!qr1 || !qr2) {
         alert("Please upload both QR images.");
