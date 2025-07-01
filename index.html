@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <title>CRM_BHARATPE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Handwriting font added -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet" />
   <style>
-    /* Body & mobile frame */
     body {
-      background-color: #1e1e1e; /* match first page bg */
+      background-color: #1e1e1e;
       font-family: Arial, sans-serif;
       color: white;
       margin: 0;
@@ -15,14 +16,13 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      -webkit-text-size-adjust: none;
     }
 
     .mobile-frame {
       position: relative;
       width: 390px;
       height: 850px;
-      background: #111; /* a bit darker than body */
+      background: #111;
       border-radius: 45px;
       box-shadow: 0 0 40px #000;
       overflow: hidden;
@@ -31,38 +31,9 @@
       justify-content: space-between;
     }
 
-    /* Volume and power buttons */
-    .volume-buttons {
-      position: absolute;
-      left: -12px;
-      top: 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .volume-up, .volume-down {
-      width: 6px;
-      height: 40px;
-      background: #444; /* slightly lighter */
-      border-radius: 3px;
-    }
-
-    .power-button {
-      position: absolute;
-      right: -12px;
-      top: 150px;
-      width: 6px;
-      height: 60px;
-      background: #444;
-      border-radius: 3px;
-    }
-
-    /* Screen */
     .screen {
       padding: 20px;
       box-sizing: border-box;
-      color: rgba(255,255,255,0.9);
       flex-grow: 1;
       display: flex;
       flex-direction: column;
@@ -70,261 +41,340 @@
       overflow-y: auto;
     }
 
-    /* Header with date/time and title */
-    .header {
-      margin-bottom: 10px;
-      text-align: center;
-      width: 100%;
+    h1 {
+      font-size: 28px;
+      color: #00ff99;
+      margin: 0 0 10px 0;
     }
 
     .live-time {
       font-size: 1rem;
       margin-bottom: 8px;
-      color: #cccccc;
+      color: #ccc;
       font-weight: 500;
     }
 
-    h1 {
-      font-size: 28px;
-      color: #00ff99;
-      margin: 0 0 10px 0;
+    /* Greeting message style (only font changed) */
+    #greetingMessage {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      height: 20px;
       user-select: none;
+      font-family: 'Caveat', cursive;
+      white-space: nowrap;
     }
 
-    /* Buttons */
     .action-button {
-      width: 100%;
-      max-width: 350px;
+      width: 350px;
       margin: 10px 0;
       padding: 14px;
       font-size: 1.1rem;
-      border: none;
+      border: 1.5px solid white;
       border-radius: 10px;
-      background-color: #00ff99;
-      color: #000;
+      background-color: rgba(0, 0, 0, 0.2);
+      color: white;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      box-shadow: none;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
       user-select: none;
-      box-shadow: 0 0 6px #00ff99aa;
     }
 
     .action-button:hover {
-      background-color: #00cc7a;
-      box-shadow: 0 0 12px #00cc7aaa;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #000;
+      border-color: white;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
     }
 
-    /* Data box and time box */
-    .data-box, .time-box {
-      width: 100%;
-      max-width: 350px;
-      margin-top: 20px;
+    .action-button:active {
+      background-color: rgba(255, 255, 255, 0.99);
+      color: #000;
+      border-color: white;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+      transform: scale(0.98);
+    }
+
+    .data-box {
+      width: 350px;
+      margin-top: 10px;
       padding: 16px;
       background: #222;
       border-radius: 10px;
-      color: #bbb;
-      font-size: 1rem;
-      text-align: left;
-      box-shadow: inset 0 0 8px #000;
-      user-select: none;
+      color: #eee;
+      font-size: 1.1rem;
+      box-sizing: border-box;
     }
 
-    .data-box strong, .time-box strong {
-      color: #00ff99;
-      font-weight: bold;
+    .data-box strong {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      color: #00ff99;
+      font-size: 1.2rem;
+      text-align: left;
     }
 
-    /* Status container */
-    .status-container {
+    /* Summary lines styled as clickable buttons */
+    .summary-line {
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .status-bulb {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: gray;
-      box-shadow: 0 0 6px rgba(255,255,255,0.2);
-      transition: background-color 0.3s ease;
-    }
-
-    /* Bottom buttons container */
-    .bottom-buttons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      padding: 15px 0;
-      background: #111;
-      border-top: 1px solid #222;
-      user-select: none;
-    }
-
-    /* Bottom buttons */
-    .bottom-button {
-      padding: 12px 24px;
-      background: #00ff99aa;
-      border: none;
-      border-radius: 25px;
-      color: #000;
-      font-size: 1rem;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #00ff99;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 0 8px #00ff9988;
+      user-select: none;
+      transition: background-color 0.25s ease;
     }
 
-    .bottom-button:hover {
-      background: #00cc7a;
-      box-shadow: 0 0 14px #00cc7a99;
+    .summary-line:last-child {
+      border-bottom: none;
     }
 
-    /* Copyright */
+    .summary-line:hover {
+      background-color: rgba(0, 255, 153, 0.15);
+    }
+
+    .highlight {
+      color: #00ff99;
+    }
+
+    /* Merchants Onboarded Today box styling */
+    .merchant-list-box {
+      width: 350px; /* same as buttons */
+      background: #222;
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 12px;
+      color: white;
+      font-size: 1.1rem;
+      border: 1.5px solid white;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    .merchant-list-box strong {
+      color: #00ff99;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+    }
+
+    .merchant-list-box div {
+      padding-left: 8px;
+      margin-bottom: 4px;
+    }
+
+    .popup {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+      z-index: 9999;
+      font-size: 1rem;
+      display: none;
+    }
+
+    .popup button {
+      margin-left: 20px;
+      padding: 4px 10px;
+      background-color: #00ff99;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
     .copyright {
       font-size: 0.75rem;
       color: #444;
       text-align: center;
-      margin-top: auto;
-      padding: 8px 0 0;
-      user-select: none;
+      padding: 12px 0 0;
     }
 
-    /* Scrollbar for .screen */
-    .screen::-webkit-scrollbar {
-      width: 8px;
-    }
-    .screen::-webkit-scrollbar-thumb {
-      background-color: #00ff99aa;
-      border-radius: 10px;
+    .orange {
+      color: orange;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="mobile-frame" role="main" aria-label="CRM BharatPe Mobile App">
-    <div class="volume-buttons" aria-hidden="true">
-      <div class="volume-up"></div>
-      <div class="volume-down"></div>
-    </div>
-    <div class="power-button" aria-hidden="true"></div>
+<div class="mobile-frame">
+  <div class="screen">
+    <div class="live-time" id="liveDateTime">Loading...</div>
+    <h1>CRM_<span style="color:#00ff99;">BHARATPE</span></h1>
 
-    <div class="screen">
-      <div class="header">
-        <div class="live-time" id="liveDateTime">Loading date/time...</div>
-        <h1>CRM_<span aria-label="BharatPe" style="color:#00ff99;">BHARATPE</span></h1>
+    <div id="greetingMessage">Loading greeting...</div>
+
+    <div class="data-box">
+      <strong>📊 Summary</strong>
+
+      <div class="summary-line" onclick="window.location.href='merchant_data_today.html'">
+        <span>Total Merchants Today</span>
+        <span id="totalMerchants" class="highlight">--</span>
       </div>
 
-      <button class="action-button" onclick="window.location.href='form.html'">➕ Add New Merchant</button>
-      <button class="action-button" onclick="window.location.href='lead_form.html'">➕ Add New Lead</button>
-      <button class="action-button" onclick="window.location.href='merchant_data.html'">📋 View Merchant Data</button>
-      <button class="action-button" onclick="window.location.href='lead_data.html'">👥 View Leads Data</button>
-      <button class="action-button" onclick="window.location.href='https://abhijdk.github.io/bharatpe'">🕗 _V0</button>
-
-      <div class="data-box" aria-live="polite" aria-atomic="true">
-        <strong>Merchant Stats:</strong>
-        Total Merchants: <span id="totalMerchants">26</span><br />
-        Active Leads: <span id="activeLeads">23</span><br />
-        Last Updated: Just now
+      <div class="summary-line" onclick="window.location.href='merchant_data.html'">
+        <span>Total Merchants</span>
+        <span id="totalMerchantAll" class="highlight">--</span>
       </div>
 
-      <div class="time-box" aria-live="polite" aria-atomic="true">
-        <strong>Punch Times & Status:</strong><br />
-        Punch In Time: <span id="punchInTime">--:--:--</span><br />
-        Punch Out Time: <span id="punchOutTime">--:--:--</span><br />
-        <div class="status-container" id="statusContainer" aria-label="Status indicators"></div>
+      <div class="summary-line" onclick="window.location.href='lead_data.html'">
+        <span>Total Leads</span>
+        <span id="totalLeads" class="highlight">--</span>
       </div>
-
-      <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
     </div>
 
-    <div class="bottom-buttons">
-      <button class="bottom-button" onclick="window.open('https://www.google.com', '_blank', 'noopener')">Google</button>
-      <button class="bottom-button" onclick="window.open('https://chat.openai.com', '_blank', 'noopener')">ChatGPT</button>
+    <button class="action-button" onclick="window.location.href='form.html'">➕ Add New Merchant</button>
+    <button class="action-button" onclick="window.location.href='lead_form.html'">➕ Add New Lead</button>
+    <button class="action-button" onclick="window.location.href='https://abhijdk.github.io/bharatpe'">🕗 _V0</button>
+
+    <div class="merchant-list-box">
+      <strong>🛍️ Merchants Onboarded Today</strong>
+      <div id="todayMerchantList">Loading...</div>
     </div>
+
+    <div class="copyright">© 2025 abhinnabehuria@outlook.com</div>
   </div>
+</div>
 
-  <script>
-    function updateDateTime() {
-      const now = new Date();
-      const options = { weekday: 'short', year:'numeric', month:'short', day:'numeric' };
-      document.getElementById('liveDateTime').innerText = now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
-    }
+<div id="popupMessage" class="popup">
+  <span id="popupText"></span>
+  <button onclick="closePopup()">OK</button>
+</div>
 
-    function randomBetween(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+<script>
+  const MERCHANT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5712gfMeZiOzTtIN21hA9qCfZhG5ori5S9fZrImtjneyqncqbPxosfEXpSc3ndpHZ/exec';
+  const LEAD_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxeR9MYieYq2ksHsW5IMHHkjagWpI4FM4etFqc4et6huzhAvCe0lWrpIWUxivJzPx4eZg/exec';
 
-    function formatTime(date) {
-      return date.toLocaleTimeString();
-    }
+  function updateDateTime() {
+    const now = new Date();
+    const options = { weekday: 'short', year:'numeric', month:'short', day:'numeric' };
+    document.getElementById('liveDateTime').innerText =
+      now.toLocaleDateString(undefined, options) + ' ' + now.toLocaleTimeString();
+  }
 
-    function setFixedPunchTimes() {
-      const now = new Date();
-      document.getElementById('punchInTime').innerText = formatTime(new Date(now - 10 * 60 * 1000));
-      document.getElementById('punchOutTime').innerText = formatTime(new Date(now.getTime() + 8 * 60 * 60 * 1000));
-    }
+  function getTodayMerchantColor(val) {
+    if (val <= 3) return 'red';
+    if (val <= 5) return 'orange';
+    return '#00ff00';
+  }
 
-    let bulbCount = 1;
-    function updateStatus() {
-      const now = new Date(), hour = now.getHours();
-      let color;
-      if (hour < 12) color = '#00ff99'; // greenish
-      else if (hour < 15) color = '#ffaa00'; // orange
-      else color = '#ff3300'; // red
+  function getTotalMerchantColor(val) {
+    if (val <= 30) return 'red';
+    if (val <= 45) return 'orange';
+    return '#00ff00';
+  }
 
-      const c = document.getElementById('statusContainer');
-      c.innerHTML = '';
-      for (let i = 0; i < bulbCount; i++) {
-        const d = document.createElement('div');
-        d.className = 'status-bulb';
-        d.style.background = color;
-        d.style.boxShadow = `0 0 8px ${color}`;
-        c.appendChild(d);
+  async function fetchMerchantData() {
+    try {
+      const res = await fetch(MERCHANT_SCRIPT_URL);
+      const data = await res.json();
+      const todayStr = new Date().toDateString();
+
+      const todayMerchants = data.filter(row => new Date(row.Timestamp).toDateString() === todayStr);
+      const todayCount = todayMerchants.length;
+      const totalCount = data.length;
+
+      document.getElementById('totalMerchants').innerText = todayCount;
+      document.getElementById('totalMerchantAll').innerText = totalCount;
+
+      document.getElementById('totalMerchants').style.color = getTodayMerchantColor(todayCount);
+      document.getElementById('totalMerchantAll').style.color = getTotalMerchantColor(totalCount);
+
+      const listDiv = document.getElementById('todayMerchantList');
+      if (todayMerchants.length > 0) {
+        listDiv.innerHTML = todayMerchants.map((row, i) =>
+          `<div>${i + 1}. ${row['Shop Name'] || 'Unnamed Shop'}</div>`).join('');
+      } else {
+        listDiv.innerHTML = `<div style="color: orange;">No merchants onboarded today yet — time to shine and make it happen! 🚀💪</div>`;
       }
-      bulbCount = bulbCount >= 15 ? 1 : bulbCount + 1;
+    } catch {
+      document.getElementById('totalMerchants').innerText = 'Error';
+      document.getElementById('totalMerchantAll').innerText = 'Error';
+      document.getElementById('todayMerchantList').innerHTML = `<div style="color: orange;">Error loading merchant list.</div>`;
+    }
+  }
+
+  async function fetchTotalLeads() {
+    try {
+      const res = await fetch(LEAD_SCRIPT_URL);
+      const data = await res.json();
+      const leadsElem = document.getElementById('totalLeads');
+      leadsElem.innerText = data.length;
+      leadsElem.style.color = '#00ff00';
+    } catch {
+      const leadsElem = document.getElementById('totalLeads');
+      leadsElem.innerText = 'Error';
+      leadsElem.style.color = 'red';
+    }
+  }
+
+  function showReminderPopup() {
+    const hour = new Date().getHours();
+    let msg = '';
+
+    if (hour >= 14 && hour < 16) {
+      msg = "🍱 Kindly take your lunch";
+    } else if (hour >= 16) {
+      msg = "🏡 Return to your home, it's your <span class='orange'>study time</span>";
     }
 
-    function updateStats() {
-      document.getElementById('totalMerchants').innerText = randomBetween(10, 35);
-      document.getElementById('activeLeads').innerText = randomBetween(12, 35);
+    if (msg) {
+      document.getElementById('popupText').innerHTML = msg;
+      document.getElementById('popupMessage').style.display = 'block';
     }
+  }
 
-    let popupShown = false;
-    function triggerPopups() {
-      const hour = new Date().getHours();
-      if (popupShown) return;
+  function closePopup() {
+    document.getElementById('popupMessage').style.display = 'none';
+  }
 
-      if (hour >= 17 && hour <= 23) {
-        alert("Kindly return to your home");
-        alert("Kindly take some food");
-        alert("It's your study time");
-        popupShown = true;
-      } else if (hour === 16) {
-        alert("Kindly return to your home");
-        alert("Kindly take some food");
-        popupShown = true;
-      } else if (hour === 15) {
-        alert("You are late for your lunch");
-        popupShown = true;
-      }
-    }
+  const greetings = {
+    morning: "GOOD MORNING ABHINNA",
+    afternoon: "GOOD AFTERNOON ABHINNA",
+    evening: "GOOD EVENING ABHINNA"
+  };
 
-    setFixedPunchTimes();
-    updateDateTime();
-    updateStats();
-    updateStatus();
-    triggerPopups();
+  function getGreetingAndBaseColor(hour) {
+    if (hour < 12) return { text: greetings.morning, baseColor: '0, 255, 0' };
+    else if (hour < 17) return { text: greetings.afternoon, baseColor: '255, 165, 0' };
+    else return { text: greetings.evening, baseColor: '255, 0, 0' };
+  }
+
+  function startGreetingAnimation() {
+    const greetingEl = document.getElementById('greetingMessage');
+    const hour = new Date().getHours();
+    const { text, baseColor } = getGreetingAndBaseColor(hour);
+    greetingEl.textContent = text;
+
+    let opacityStep = 0.1;
+    let increasing = true;
 
     setInterval(() => {
-      updateDateTime();
-      updateStats();
-      updateStatus();
+      greetingEl.style.color = `rgba(${baseColor}, ${opacityStep.toFixed(2)})`;
+      if (increasing) {
+        opacityStep += 0.1;
+        if (opacityStep >= 1) increasing = false;
+      } else {
+        opacityStep -= 0.1;
+        if (opacityStep <= 0.1) increasing = true;
+      }
     }, 1000);
-  </script>
+  }
+
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+  fetchMerchantData();
+  fetchTotalLeads();
+  startGreetingAnimation();
+  showReminderPopup();
+</script>
 </body>
 </html>
